@@ -1,0 +1,8 @@
+.direnv
+
+
+# Added by cargo
+
+/target
+
+*.wasm

@@ -1,0 +1,24 @@
+{
+  "editor.defaultFormatter": "dprint.dprint",
+  "editor.formatOnSave": true,
+  "[rust]": {
+    "editor.defaultFormatter": "rust-lang.rust-analyzer",
+    "editor.formatOnSave": true,
+    "editor.inlayHints.enabled": "onUnlessPressed"
+  },
+  "[nix]": {
+    "editor.defaultFormatter": "jnoortheen.nix-ide"
+  },
+  "[typst]": {
+    "editor.formatOnSave": false
+  },
+  "nix.enableLanguageServer": true,
+  "nix.serverPath": "nil",
+  "nix.serverSettings": {
+    "nil": {
+      "formatting": {
+        "command": ["nixfmt"]
+      }
+    }
+  }
+}

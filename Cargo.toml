@@ -1,0 +1,20 @@
+[package]
+name = "dprint-plugin-typstyle"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.89"
+dprint-core = { version = "0.67.1", features = ["wasm"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = { version = "1.0", features = ["preserve_order"] }
+
+# Disable default feature to omit `wasm-bindgen`
+# https://github.com/Enter-tainer/typstyle/blob/2129609c0414e163d3ca1460d97c7b2ae5c271ff/Cargo.toml#L42C1-L42C13
+# https://github.com/dprint/dprint/issues/447
+typstyle = { version = "0.11.34", default-features = false }
+
+[lib]
+crate-type = ["lib", "cdylib"]

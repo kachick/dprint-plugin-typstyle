@@ -1,0 +1,104 @@
+# https://github.com/NixOS/nixos-artwork/blob/35ebbbf01c3119005ed180726c388a01d4d1100c/logo/README.md#L5
+name: ❄️
+on:
+  push:
+    tags:
+      # Do not add v prefix: https://github.com/dprint/plugins/blob/75a3755b8734eee294214a7d7efc18145668a99f/README.md?plain=1#L27
+      # https://github.com/actions/runner/issues/1699#issuecomment-1046796067
+      - '[0-9]+.[0-9]+.[0-9]+'
+    branches: [main]
+    paths:
+      - '.github/workflows/nix.yml'
+      - '**.nix'
+      - 'flake.*'
+      - '**.rs'
+      - 'Cargo.*'
+      - 'example'
+      - 'Taskfile.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/nix.yml'
+      - '**.nix'
+      - 'flake.*'
+      - '**.rs'
+      - 'Cargo.*'
+      - 'example'
+      - 'Taskfile.yml'
+  schedule:
+    # Every 10:42 JST
+    # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule
+    - cron: '42 1 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    # outputs:
+    #   wasm-zip-url: ${{ steps.upload.outputs.artifact-url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@da36cb69b1c3247ad7a1f931ebfd954a1105ef14 # v14
+      - uses: DeterminateSystems/magic-nix-cache-action@87b14cf437d03d37989d87f0fa5ce4f5dc1a330b # v8
+      - run: nix develop --command echo 'This step should be done before any other "nix develop" steps because of measuring Nix build time'
+      - run: nix flake check
+      - run: nix flake show
+      - run: nix develop --command task deps
+      - uses: Swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84 # v2
+      - run: nix develop --command task
+      - name: Upload WASM file as an artifact
+        # id: upload
+        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
+        with:
+          name: 'plugins'
+          path: 'target/wasm32-unknown-unknown/release/dprint_plugin_typstyle.wasm'
+  check:
+    strategy:
+      fail-fast: false
+      # Syntax https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs
+      matrix:
+        # Due to https://github.com/actions/runner/issues/849, we have to use quotes for 'n.0'
+        dprint-version: [
+          '', # empty means to latest: https://github.com/dprint/check/blob/2f1cf31537886c3bfb05591c031f7744e48ba8a1/action.yml#L8
+          '0.47.2', # selfup {"extract":"\\d[^']+","replacer":["dprint", "--version"], "nth": 2}
+        ]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    needs: [build]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dprint/check@2f1cf31537886c3bfb05591c031f7744e48ba8a1 # v2.2
+        with:
+          dprint-version: '${{ matrix.dprint-version }}'
+      - name: Run with WASM plugin
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download
+          tree
+          dprint --version
+          dprint output-file-paths --config=dprint-dogfooding.json "--plugins=${PWD}/plugins/dprint_plugin_typstyle.wasm"
+      - run: dprint check --config=dprint-dogfooding.json "--plugins=${PWD}/plugins/dprint_plugin_typstyle.wasm"
+        id: dprint-check
+        continue-on-error: true
+      - run: false
+        if: steps.dprint-check.outcome == 'success'
+      - run: |
+          dprint fmt --config=dprint-dogfooding.json "--plugins=${PWD}/plugins/dprint_plugin_typstyle.wasm"
+          diff ./examples/raw.typ ./examples/expected.typ
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    needs: [build, check]
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      # Required to checkout for gh command
+      - uses: actions/checkout@v4
+      - run: |
+          gh run download
+          tree
+          mv plugins/dprint_plugin_typstyle.wasm plugins/plugin.wasm
+      - run: |
+          gh release create --verify-tag "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" plugins/plugin.wasm

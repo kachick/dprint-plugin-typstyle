@@ -1,0 +1,25 @@
+root = true
+
+[*]
+end_of_line = lf
+charset = utf-8
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.md]
+trim_trailing_whitespace = false
+
+[*.rs]
+end_of_line = lf
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+# https://github.com/rust-lang/rust/blob/19469cb536af8cdd7b0d3f6960e7815b218577c2/.editorconfig#L16
+max_line_length = 100
+
+[{Makefile,*.mk,.gitmodules,*.sh,*.dash,*.bash,*.zsh}]
+indent_style = tab
+indent_size = 4
+

@@ -1,0 +1,50 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  default:
+    deps:
+      - task: check
+      - task: build
+  build:
+    - cargo build --release --target=wasm32-unknown-unknown
+  check:
+    deps:
+      - task: test
+      - task: lint
+  test:
+    cmds:
+      - cargo test
+  fmt:
+    cmds:
+      - cargo fmt
+      - dprint fmt
+      - git ls-files '*.nix' | xargs nix fmt
+  lint:
+    cmds:
+      - cargo clippy
+      - dprint check
+      - typos . .github .vscode
+      # nix fmt doesn't have check: https://github.com/NixOS/nix/issues/6918
+      - git ls-files '*.nix' | xargs nixfmt --check
+  dogfooding: # Intentionally failing
+    deps:
+      - task: build
+    cmds:
+      - dprint check --config=dprint-dogfooding.json --plugins=./target/wasm32-unknown-unknown/release/dprint_plugin_typstyle.wasm
+  deps:
+    cmds:
+      - rustc --version
+      - cargo --version
+      - rust-analyzer --version
+      - clippy-driver --version
+      - rustfmt --version
+      - dprint --version
+      - nix --version
+      - nil --version
+      - nixfmt --version
+      - task --version
+      - typos --version
+      - typst --version
+      - typstyle --version
