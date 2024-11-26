@@ -52,3 +52,4 @@ tasks:
       - typos --version
       - typst --version
       - typstyle --version
+      - selfup -version
