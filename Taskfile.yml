@@ -28,11 +28,15 @@ tasks:
       - typos . .github .vscode
       # nix fmt doesn't have check: https://github.com/NixOS/nix/issues/6918
       - git ls-files '*.nix' | xargs nixfmt --check
+      - git ls-files | xargs selfup list -check
   dogfooding: # Intentionally failing
     deps:
       - task: build
     cmds:
       - dprint check --config=dprint-dogfooding.json --plugins=./target/wasm32-unknown-unknown/release/dprint_plugin_typstyle.wasm
+  selfup:
+    cmds:
+      - git ls-files | xargs selfup run
   deps:
     cmds:
       - rustc --version
