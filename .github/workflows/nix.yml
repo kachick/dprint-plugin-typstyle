@@ -60,7 +60,7 @@ jobs:
         # Due to https://github.com/actions/runner/issues/849, we have to use quotes for 'n.0'
         dprint-version: [
           '', # empty means to latest: https://github.com/dprint/check/blob/2f1cf31537886c3bfb05591c031f7744e48ba8a1/action.yml#L8
-          '0.47.2', # selfup {"extract":"\\d[^']+","replacer":["dprint", "--version"], "nth": 2}
+          '0.47.6', # selfup {"extract":"\\d[^']+","replacer":["dprint", "--version"], "nth": 2}
         ]
     runs-on: ubuntu-24.04
     timeout-minutes: 15
