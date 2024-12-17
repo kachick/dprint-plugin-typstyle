@@ -10,7 +10,7 @@
 dprint config add 'kachick/typstyle'
 ```
 
-This plugin delegates the formatter feature to the [upstream crate](https://github.com/Enter-tainer/typstyle).
+This plugin delegates the formatter feature to the [upstream typstyle-core crate](https://github.com/Enter-tainer/typstyle).
 
 ## Configuration example
 

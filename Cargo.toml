@@ -14,7 +14,7 @@ serde_json = { version = "1.0", features = ["preserve_order"] }
 # Disable default feature to omit `wasm-bindgen`
 # https://github.com/Enter-tainer/typstyle/blob/2129609c0414e163d3ca1460d97c7b2ae5c271ff/Cargo.toml#L42C1-L42C13
 # https://github.com/dprint/dprint/issues/447
-typstyle = { version = "0.12.12", default-features = false }
+typstyle-core = { version = "0.12.12", default-features = false }
 
 [lib]
 crate-type = ["lib", "cdylib"]
