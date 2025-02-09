@@ -20,7 +20,7 @@ This plugin delegates the formatter feature to the [upstream typstyle-core crate
     "column": 78
   },
   "plugins": [
-    "https://plugins.dprint.dev/kachick/typstyle-0.2.5.wasm"
+    "https://plugins.dprint.dev/kachick/typstyle-0.2.6.wasm"
   ]
 }
 ```
