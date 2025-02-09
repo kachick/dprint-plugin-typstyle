@@ -1,6 +1,8 @@
 #set text(
   font: "New Computer Modern",
-  size: 10pt
+
+
+  size: 10pt,
 )
 #set page(
   paper: "a6",
@@ -8,7 +10,20 @@
 )
 #set par(
   justify: true,
+
+
   leading: 0.52em,
+)
+
+This line has spaces.
+
+This line is much much much much much much much much much much much much much much much much much much much much much much much much much much long.
+
+#set rect(
+  width: 100%,
+  height: 100%,
+  inset: 4pt,
+  stroke: auto,
 )
 
 = Introduction

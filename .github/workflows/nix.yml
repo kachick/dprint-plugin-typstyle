@@ -64,27 +64,35 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     needs: [build]
+    # Don't use `nix develop` in this steps to avoid other devshell tools and make faster to run
     steps:
       - uses: actions/checkout@v4
-      - uses: dprint/check@2f1cf31537886c3bfb05591c031f7744e48ba8a1 # v2.2
+      - name: Install dprint
+        env:
+          DPRINT_CLI_VERSION: '${{ matrix.dprint-version }}'
+        run: |
+          curl -fsSL https://dprint.dev/install.sh | sh -s "$DPRINT_CLI_VERSION" > /dev/null 2>&1
+          echo "/home/runner/.dprint/bin" >> "$GITHUB_PATH"
+      - name: Install Task
+        uses: arduino/setup-task@v2
         with:
-          dprint-version: '${{ matrix.dprint-version }}'
-      - name: Run with WASM plugin
+          version: '3.39.2' # selfup {"extract":"\\d\\.\\d+\\.\\d+","replacer":["task", "--version"], "nth": 3}
+      - name: Download pre-built plugin
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh run download '${{ github.run_id }}'
           tree
+      - name: Make sure dependencies
+        run: |
           dprint --version
-          dprint output-file-paths --config=dprint-dogfooding.json "--plugins=${PWD}/plugins/dprint_plugin_typstyle.wasm"
-      - run: dprint check --config=dprint-dogfooding.json "--plugins=${PWD}/plugins/dprint_plugin_typstyle.wasm"
-        id: dprint-check
-        continue-on-error: true
-      - run: false
-        if: steps.dprint-check.outcome == 'success'
-      - run: |
-          dprint fmt --config=dprint-dogfooding.json "--plugins=${PWD}/plugins/dprint_plugin_typstyle.wasm"
-          diff ./examples/raw.typ ./examples/expected.typ
+          task --version
+          diff --version
+      - name: Test
+        env:
+          PLUGIN_DIR: '${{ github.workspace }}/plugins/dprint_plugin_typstyle.wasm'
+        run:
+          task test
   release:
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-24.04
