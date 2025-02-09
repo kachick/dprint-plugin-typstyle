@@ -5,7 +5,7 @@ on:
       run_id:
         description: 'Target Run'
         required: true
-        type: number
+        type: string
       release:
         required: true
         type: boolean
@@ -40,7 +40,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh run download '${{ github.run_id }}'
+          gh run download '${{ inputs.run_id }}'
           tree
       - name: Make sure dependencies
         run: |
@@ -62,7 +62,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
     steps:
       - run: |
-          gh run download '${{ github.run_id }}' --repo '${{ github.repository }}'
+          gh run download '${{ inputs.run_id }}' --repo '${{ github.repository }}'
           tree
           mv plugins/dprint_plugin_typstyle.wasm plugins/plugin.wasm
       - run: |
