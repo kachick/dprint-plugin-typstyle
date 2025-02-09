@@ -34,8 +34,20 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
-    # outputs:
-    #   wasm-zip-url: ${{ steps.upload.outputs.artifact-url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@e50d5f73bfe71c2dd0aa4218de8f4afa59f8f81d # v16
+      - uses: Swatinem/rust-cache@f0deed1e0edfc6a9be95417288c0e1099b1eeec3 # v2
+      - run: nix develop --command task build
+      - name: Upload WASM file as an artifact
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        with:
+          name: 'plugins'
+          path: 'target/wasm32-unknown-unknown/release/dprint_plugin_typstyle.wasm'
+
+  flake:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@e50d5f73bfe71c2dd0aa4218de8f4afa59f8f81d # v16
@@ -45,67 +57,10 @@ jobs:
       - run: nix develop --command task deps
       - uses: Swatinem/rust-cache@f0deed1e0edfc6a9be95417288c0e1099b1eeec3 # v2
       - run: nix develop --command task
-      - name: Upload WASM file as an artifact
-        # id: upload
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
-        with:
-          name: 'plugins'
-          path: 'target/wasm32-unknown-unknown/release/dprint_plugin_typstyle.wasm'
-  check:
-    strategy:
-      fail-fast: false
-      # Syntax https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs
-      matrix:
-        # Due to https://github.com/actions/runner/issues/849, we have to use quotes for 'n.0'
-        dprint-version: [
-          '', # empty means to latest: https://github.com/dprint/check/blob/2f1cf31537886c3bfb05591c031f7744e48ba8a1/action.yml#L8
-          '0.48.0', # selfup {"extract":"\\d[^']+","replacer":["dprint", "--version"], "nth": 2}
-        ]
-    runs-on: ubuntu-24.04
-    timeout-minutes: 15
+
+  CICD:
     needs: [build]
-    # Don't use `nix develop` in this steps to avoid other devshell tools and make faster to run
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install dprint
-        run: |
-          # Don't use quotation for dprint-version, it will be broken for empty(latest) pattern.
-          curl -fsSL https://dprint.dev/install.sh | sh -s ${{ matrix.dprint-version }} > /dev/null 2>&1
-          echo "/home/runner/.dprint/bin" >> "$GITHUB_PATH"
-      - name: Install Task
-        uses: arduino/setup-task@v2
-        with:
-          version: '3.39.2' # selfup {"extract":"\\d\\.\\d+\\.\\d+","replacer":["task", "--version"], "nth": 3}
-      - name: Download pre-built plugin
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh run download '${{ github.run_id }}'
-          tree
-      - name: Make sure dependencies
-        run: |
-          dprint --version
-          task --version
-          diff --version
-      - name: Test
-        env:
-          PLUGIN_DIR: '${{ github.workspace }}/plugins'
-          SKIP_BUILD: 'true'
-        run:
-          task test
-  release:
-    if: startsWith(github.ref, 'refs/tags/')
-    runs-on: ubuntu-24.04
-    timeout-minutes: 15
-    needs: [build, check]
-    env:
-      GH_TOKEN: ${{ github.token }}
-    steps:
-      # Required to checkout for gh command
-      - uses: actions/checkout@v4
-      - run: |
-          gh run download '${{ github.run_id }}'
-          tree
-          mv plugins/dprint_plugin_typstyle.wasm plugins/plugin.wasm
-      - run: |
-          gh release create --verify-tag "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" plugins/plugin.wasm
+    uses: ./.github/workflows/CICD.yml
+    with:
+      run_id: '${{ github.run_id }}'
+      release: ${{ startsWith(github.ref, 'refs/tags/') }}
