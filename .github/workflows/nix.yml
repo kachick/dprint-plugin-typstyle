@@ -73,7 +73,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh run download
+          gh run download '${{ github.run_id }}'
           tree
           dprint --version
           dprint output-file-paths --config=dprint-dogfooding.json "--plugins=${PWD}/plugins/dprint_plugin_typstyle.wasm"
@@ -96,7 +96,7 @@ jobs:
       # Required to checkout for gh command
       - uses: actions/checkout@v4
       - run: |
-          gh run download
+          gh run download '${{ github.run_id }}'
           tree
           mv plugins/dprint_plugin_typstyle.wasm plugins/plugin.wasm
       - run: |
