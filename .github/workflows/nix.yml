@@ -68,10 +68,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install dprint
-        env:
-          DPRINT_CLI_VERSION: '${{ matrix.dprint-version }}'
         run: |
-          curl -fsSL https://dprint.dev/install.sh | sh -s "$DPRINT_CLI_VERSION" > /dev/null 2>&1
+          curl -fsSL https://dprint.dev/install.sh | sh -s '${{ matrix.dprint-version }}' > /dev/null 2>&1
           echo "/home/runner/.dprint/bin" >> "$GITHUB_PATH"
       - name: Install Task
         uses: arduino/setup-task@v2
@@ -91,6 +89,7 @@ jobs:
       - name: Test
         env:
           PLUGIN_DIR: '${{ github.workspace }}/plugins/dprint_plugin_typstyle.wasm'
+          SKIP_BUILD: 'true'
         run:
           task test
   release:

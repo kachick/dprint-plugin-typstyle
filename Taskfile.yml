@@ -11,7 +11,13 @@ tasks:
       - check
       - build
   build: # Prefer cargo cache rather than go-task cache feature
-    - cargo build --release --target=wasm32-unknown-unknown
+    env:
+      SKIP_BUILD: 'false' # Don't use "$CI" for this purpose
+    status:
+      - |
+          [ "$SKIP_BUILD" == 'true' ]
+    cmds:
+      - cargo build --release --target=wasm32-unknown-unknown
   check:
     deps:
       - test
