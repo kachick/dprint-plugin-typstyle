@@ -14,13 +14,41 @@ This plugin delegates the formatter feature to the [upstream typstyle-core crate
 
 ## Configuration example
 
+Minimum
+
 ```json
 {
-  "typst": {
-    "column": 78
-  },
   "plugins": [
-    "https://plugins.dprint.dev/kachick/typstyle-0.2.6.wasm"
+    "https://plugins.dprint.dev/kachick/typstyle-0.2.7.wasm"
   ]
 }
 ```
+
+Customize if necessary
+
+```json
+{
+  "typst": {
+    "tab_spaces": 3,
+    "column": 78,
+    "blank_lines_upper_bound": 5
+  },
+  "plugins": [
+    "https://plugins.dprint.dev/kachick/typstyle-0.2.7.wasm"
+  ]
+}
+```
+
+## Order of determines the default
+
+1. typst section in dprint.json
+1. [global config in dprint.json](https://dprint.dev/config/#global-configuration)
+1. [default in typstyle-core](https://github.com/Enter-tainer/typstyle/blob/v0.12.14/crates/typstyle-core/src/config.rs#L13-L21)
+
+## List of options
+
+| dprint-plugin-typstyle  | dprint global config | typstyle                |
+| ----------------------- | -------------------- | ----------------------- |
+| column                  | lineWidth            | column(max_width)       |
+| tab_spaces              | indentWidth          | tab_spaces              |
+| blank_lines_upper_bound | `none`               | blank_lines_upper_bound |

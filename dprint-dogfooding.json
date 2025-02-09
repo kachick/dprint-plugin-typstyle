@@ -1,6 +1,0 @@
-{
-  "typst": {
-    "column": 78
-  },
-  "excludes": [".git", ".direnv", "target"]
-}

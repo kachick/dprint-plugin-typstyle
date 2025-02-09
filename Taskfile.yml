@@ -2,20 +2,53 @@
 
 version: '3'
 
+env:
+  PLUGIN_DIR: '{{.USER_WORKING_DIR}}/target/wasm32-unknown-unknown/release'
+
 tasks:
   default:
     deps:
-      - task: check
-      - task: build
-  build:
-    - cargo build --release --target=wasm32-unknown-unknown
+      - check
+      - build
+  build: # Prefer cargo cache rather than go-task cache feature
+    env:
+      SKIP_BUILD: 'false' # Don't use "$CI" for this purpose
+    status:
+      - |
+          [ "$SKIP_BUILD" == 'true' ]
+    cmds:
+      - cargo build --release --target=wasm32-unknown-unknown
   check:
     deps:
-      - task: test
-      - task: lint
+      - test
+      - lint
   test:
+    deps:
+      - test-e2e-default
+      - test-e2e-all
+      - test-e2e-with_global_config
+    # cmds:
+    #   - cargo test # There is no test. If adding here, required to update GitHub Actions workflow
+  test-e2e-*:
+    deps:
+      - build
+    vars:
+      TESTNAME: '{{index .MATCH 0}}'
     cmds:
-      - cargo test
+      - cd 'tests/{{.TESTNAME}}' && dprint check --plugins="$PLUGIN_DIR/dprint_plugin_typstyle.wasm" expected.typ
+      - cd 'tests/{{.TESTNAME}}' && diff <(cat raw.typ | dprint fmt --stdin raw.typ --plugins="$PLUGIN_DIR/dprint_plugin_typstyle.wasm") expected.typ
+  bump-fixtures-*:
+    deps:
+      - build
+    vars:
+      TESTNAME: '{{index .MATCH 0}}'
+    cmds:
+      - cd 'tests/{{.TESTNAME}}' && cat raw.typ | dprint fmt --stdin raw.typ --plugins="$PLUGIN_DIR/dprint_plugin_typstyle.wasm" > expected.typ
+  bump-fixtures:
+    deps:
+      - bump-fixtures-default
+      - bump-fixtures-all
+      - bump-fixtures-with_global_config
   fmt:
     cmds:
       - cargo fmt
@@ -29,11 +62,6 @@ tasks:
       # nix fmt doesn't have check: https://github.com/NixOS/nix/issues/6918
       - git ls-files '*.nix' | xargs nixfmt --check
       - git ls-files | xargs selfup list -check
-  dogfooding: # Intentionally failing
-    deps:
-      - task: build
-    cmds:
-      - dprint check --config=dprint-dogfooding.json --plugins=./target/wasm32-unknown-unknown/release/dprint_plugin_typstyle.wasm
   selfup:
     cmds:
       - git ls-files | xargs selfup run

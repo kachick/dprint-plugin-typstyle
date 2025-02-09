@@ -17,8 +17,10 @@ use dprint_core::plugins::SyncPluginHandler;
 #[derive(Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Configuration {
-    // TODO: Support other options in upstream: https://github.com/Enter-tainer/typstyle/blob/v0.12.14/crates/typstyle-core/src/config.rs#L4-L11
-    pub column: u32, // == line_width
+    // List of upstream: https://github.com/Enter-tainer/typstyle/blob/v0.12.14/crates/typstyle-core/src/config.rs#L4-L11
+    pub tab_spaces: u8,
+    pub max_width: u32,
+    pub blank_lines_upper_bound: u32,
 }
 
 #[derive(Default)]
@@ -49,15 +51,37 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
     ) -> PluginResolveConfigurationResult<Configuration> {
         let mut config = config;
         let mut diagnostics = Vec::new();
-        let column = get_value(
+        let tab_spaces = get_value(
             &mut config,
-            "column",
-            global_config.line_width.unwrap_or(80),
+            "tab_spaces",
+            global_config
+                .indent_width
+                .unwrap_or(typstyle_core::Config::new().tab_spaces as u8),
+            &mut diagnostics,
+        );
+
+        let max_width = get_value(
+            &mut config,
+            "column", // Use different name in actual dprint config file to keep backward compatibility. It might be changed in future major/minor version updating.
+            global_config
+                .line_width
+                .unwrap_or(typstyle_core::Config::new().max_width as u32),
+            &mut diagnostics,
+        );
+
+        let blank_lines_upper_bound = get_value(
+            &mut config,
+            "blank_lines_upper_bound",
+            typstyle_core::Config::new().blank_lines_upper_bound as u32,
             &mut diagnostics,
         );
 
         PluginResolveConfigurationResult {
-            config: Configuration { column },
+            config: Configuration {
+                tab_spaces,
+                max_width,
+                blank_lines_upper_bound,
+            },
             diagnostics,
             file_matching: FileMatchingInfo {
                 file_extensions: vec!["typ".to_string()],
@@ -76,8 +100,18 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
         }
 
         let text = String::from_utf8_lossy(&request.file_bytes);
-        let result =
-            typstyle_core::format_with_width(text.as_ref(), request.config.column as usize);
+
+        let config = typstyle_core::Config {
+            tab_spaces: request.config.tab_spaces as usize,
+            max_width: request.config.max_width as usize,
+            blank_lines_upper_bound: request.config.blank_lines_upper_bound as usize,
+        };
+        let formatter = typstyle_core::Typstyle::new(config);
+
+        let result = formatter
+            .format_content(text.as_ref())
+            .unwrap_or_else(|_| text.to_string());
+
         if result == text {
             Ok(None)
         } else {

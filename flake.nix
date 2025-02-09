@@ -33,6 +33,7 @@
               (with pkgs; [
                 bashInteractive
                 findutils # xargs
+                diffutils # for E2E test
                 nixfmt-rfc-style
                 nil
                 go-task
