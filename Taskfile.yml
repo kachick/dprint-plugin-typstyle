@@ -36,14 +36,14 @@ tasks:
       TESTNAME: '{{index .MATCH 0}}'
     cmds:
       - cd 'tests/{{.TESTNAME}}' && dprint check --plugins="$PLUGIN_DIR/dprint_plugin_typstyle.wasm" expected.typ
-      - cd 'tests/{{.TESTNAME}}' && diff <(cat raw.typ | dprint fmt --stdin raw.typ --plugins="$PLUGIN_DIR/dprint_plugin_typstyle.wasm") expected.typ
+      - cd 'tests/{{.TESTNAME}}' && diff <(cat ../raw.typ | dprint fmt --stdin ../raw.typ --plugins="$PLUGIN_DIR/dprint_plugin_typstyle.wasm") expected.typ
   bump-fixtures-*:
     deps:
       - build
     vars:
       TESTNAME: '{{index .MATCH 0}}'
     cmds:
-      - cd 'tests/{{.TESTNAME}}' && cat raw.typ | dprint fmt --stdin raw.typ --plugins="$PLUGIN_DIR/dprint_plugin_typstyle.wasm" > expected.typ
+      - cd 'tests/{{.TESTNAME}}' && cat ../raw.typ | dprint fmt --stdin ../raw.typ --plugins="$PLUGIN_DIR/dprint_plugin_typstyle.wasm" > expected.typ
   bump-fixtures:
     deps:
       - bump-fixtures-default
