@@ -33,7 +33,7 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
             config_key: "typst".to_string(),
             help_url: "https://github.com/kachick/dprint-plugin-typstyle".to_string(), // fill this in
             config_schema_url: "".to_string(), // leave this empty for now
-            update_url: Some("https://plugins.dprint.dev/kachick/typst/latest.json".to_string()),
+            update_url: Some("https://plugins.dprint.dev/kachick/typstyle/latest.json".to_string()),
         }
     }
 
