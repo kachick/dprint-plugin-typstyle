@@ -61,7 +61,37 @@
             # Adding packages like binutils is not enough
             #
             # https://github.com/NixOS/nixpkgs/issues/70238
-            CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER = "lld";
+            env.CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER = "lld";
+          };
+        }
+      );
+      packages = forAllSystems (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        {
+          default = pkgs.rustPlatform.buildRustPackage {
+            name = "dprint-plugin-typstyle";
+            pname = "dprint-plugin-typstyle";
+            src = pkgs.lib.cleanSource self;
+
+            nativeBuildInputs = with pkgs; [
+              rustc-wasm32.llvmPackages.bintools # rust-lld
+            ];
+
+            # Needed for avoiding "error: linker `rust-lld` not found".
+            # Adding packages like binutils is not enough
+            #
+            # https://github.com/NixOS/nixpkgs/issues/70238
+            env.CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER = "lld";
+
+            cargoLock = {
+              lockFileContents = builtins.readFile ./Cargo.lock;
+            };
+
+            # Or https://discourse.nixos.org/t/building-a-rust-package-derivation-using-buildrustpackage-for-wasm32-unknown-unknown/59925/2
+
           };
         }
       );
