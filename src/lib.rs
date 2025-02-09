@@ -14,11 +14,10 @@ use dprint_core::configuration::GlobalConfiguration;
 use dprint_core::generate_plugin_code;
 use dprint_core::plugins::SyncPluginHandler;
 
-use typstyle_core::Typstyle;
-
 #[derive(Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Configuration {
+    // TODO: Support other options in upstream: https://github.com/Enter-tainer/typstyle/blob/v0.12.14/crates/typstyle-core/src/config.rs#L4-L11
     pub column: u32, // == line_width
 }
 
@@ -77,8 +76,8 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
         }
 
         let text = String::from_utf8_lossy(&request.file_bytes);
-        let result = Typstyle::new_with_content(text.to_string(), request.config.column as usize)
-            .pretty_print();
+        let result =
+            typstyle_core::format_with_width(text.as_ref(), request.config.column as usize);
         if result == text {
             Ok(None)
         } else {
