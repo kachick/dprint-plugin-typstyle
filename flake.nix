@@ -71,13 +71,19 @@
           pkgs = nixpkgs.legacyPackages.${system};
         in
         {
-          default = pkgs.rustPlatform.buildRustPackage {
+          # Don't use buildRustPackage for now. Using it for WASM build looks not easy way.
+          # e.g https://discourse.nixos.org/t/building-a-rust-package-derivation-using-buildrustpackage-for-wasm32-unknown-unknown/59925/2
+          default = pkgs.stdenv.mkDerivation rec {
             name = "dprint-plugin-typstyle";
             pname = "dprint-plugin-typstyle";
             src = pkgs.lib.cleanSource self;
+            version = "0.2.7";
 
             nativeBuildInputs = with pkgs; [
+              rustc
               rustc-wasm32.llvmPackages.bintools # rust-lld
+              cargo
+              rustPlatform.cargoSetupHook
             ];
 
             # Needed for avoiding "error: linker `rust-lld` not found".
@@ -86,12 +92,17 @@
             # https://github.com/NixOS/nixpkgs/issues/70238
             env.CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER = "lld";
 
-            cargoLock = {
-              lockFileContents = builtins.readFile ./Cargo.lock;
+            cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
+              inherit src;
+              name = "${pname}-${version}";
+              hash = "sha256-KEaxkkmGtAH0ZZqCmyyDm7A6l7ar9HRmThFzNJ274Ko=";
             };
 
-            # Or https://discourse.nixos.org/t/building-a-rust-package-derivation-using-buildrustpackage-for-wasm32-unknown-unknown/59925/2
-
+            buildPhase = ''
+              runHook preBuild
+              cargo build --release --target=wasm32-unknown-unknown
+              runHook postBuild
+            '';
           };
         }
       );
