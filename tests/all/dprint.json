@@ -1,7 +1,7 @@
 {
   "typst": {
-    "tab_spaces": 3,
-    "column": 20,
-    "blank_lines_upper_bound": 5,
+    "indentWidth": 3,
+    "lineWidth": 20,
+    "blankLinesUpperBound": 5,
   },
 }
