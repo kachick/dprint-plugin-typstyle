@@ -22,6 +22,9 @@ tasks:
     deps:
       - test
       - lint
+  update-jsonschema:
+    cmds:
+      - './scripts/normalize_json_schema.bash'
   test:
     deps:
       - test-e2e-default
@@ -37,6 +40,11 @@ tasks:
     cmds:
       - cd 'tests/{{.TESTNAME}}' && dprint check --plugins="$PLUGIN_DIR/dprint_plugin_typstyle.wasm" expected.typ
       - cd 'tests/{{.TESTNAME}}' && diff <(cat ../raw.typ | dprint fmt --stdin ../raw.typ --plugins="$PLUGIN_DIR/dprint_plugin_typstyle.wasm") expected.typ
+  validate-jsonschema:
+    deps:
+      - 'update-jsonschema'
+    cmds:
+      - 'scripts/test-jsonschema.bash'
   bump-fixtures-*:
     deps:
       - build

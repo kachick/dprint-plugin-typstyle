@@ -42,8 +42,11 @@ jobs:
       - name: Upload WASM file as an artifact
         uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
-          name: 'plugins'
-          path: 'target/wasm32-unknown-unknown/release/dprint_plugin_typstyle.wasm'
+          if-no-files-found: error
+          name: 'dist'
+          path: |
+            target/wasm32-unknown-unknown/release/dprint_plugin_typstyle.wasm
+            deployment/schema.json
 
   flake:
     runs-on: ubuntu-24.04
@@ -56,10 +59,10 @@ jobs:
       - run: nix flake show
       - run: nix develop --command task deps
       - uses: Swatinem/rust-cache@f0deed1e0edfc6a9be95417288c0e1099b1eeec3 # v2
-      - run: nix develop --command task
+      - run: nix develop --command task validate-jsonschema
 
   CICD:
-    needs: [build]
+    needs: [build, flake]
     uses: ./.github/workflows/CICD.yml
     with:
       run_id: '${{ github.run_id }}'

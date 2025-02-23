@@ -29,9 +29,9 @@ Customize if necessary
 ```json
 {
   "typst": {
-    "tab_spaces": 3,
-    "column": 78,
-    "blank_lines_upper_bound": 5
+    "indentWidth": 3,
+    "lineWidth": 78,
+    "blankLinesUpperBound": 5
   },
   "plugins": [
     "https://plugins.dprint.dev/kachick/typstyle-0.2.7.wasm"
@@ -45,10 +45,10 @@ Customize if necessary
 1. [global config in dprint.json](https://dprint.dev/config/#global-configuration)
 1. [default in typstyle-core](https://github.com/Enter-tainer/typstyle/blob/v0.12.14/crates/typstyle-core/src/config.rs#L13-L21)
 
-## List of options
+## Relationships of the option names
 
-| dprint-plugin-typstyle  | dprint global config | typstyle                |
-| ----------------------- | -------------------- | ----------------------- |
-| column                  | lineWidth            | column(max_width)       |
-| tab_spaces              | indentWidth          | tab_spaces              |
-| blank_lines_upper_bound | `none`               | blank_lines_upper_bound |
+| dprint-plugin-typstyle | dprint global config | typstyle-core           | typstyle CLI |
+| ---------------------- | -------------------- | ----------------------- | ------------ |
+| lineWidth              | lineWidth            | max_width               | column       |
+| indentWidth            | indentWidth          | tab_spaces              | tab-width    |
+| blankLinesUpperBound   | `none`               | blank_lines_upper_bound | `none`       |

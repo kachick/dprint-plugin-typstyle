@@ -14,13 +14,31 @@ use dprint_core::configuration::GlobalConfiguration;
 use dprint_core::generate_plugin_code;
 use dprint_core::plugins::SyncPluginHandler;
 
+use schemars::{schema_for, JsonSchema};
+
 #[derive(Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
+#[derive(JsonSchema)]
+// Adjust names with dprint global configuration
+//
+// List of upstream:
+//   dprint: https://github.com/dprint/dprint/blob/0.49.0/crates/core/src/configuration.rs#L257-L278
+//   typestyle: https://github.com/Enter-tainer/typstyle/blob/v0.12.14/crates/typstyle-core/src/config.rs#L4-L11
+// TODO: Remove required from all options in json schema. See https://github.com/GREsau/schemars/issues/344
 pub struct Configuration {
-    // List of upstream: https://github.com/Enter-tainer/typstyle/blob/v0.12.14/crates/typstyle-core/src/config.rs#L4-L11
-    pub tab_spaces: u8,
-    pub max_width: u32,
+    // column/max_width in typstyle-core
+    pub line_width: u32,
+
+    // tab_spaces in typstyle-core
+    pub indent_width: u8,
+
+    // None in dprint
     pub blank_lines_upper_bound: u32,
+}
+
+pub fn generate_json_schema() -> String {
+    let schema = schema_for!(Configuration);
+    serde_json::to_string_pretty(&schema).unwrap()
 }
 
 #[derive(Default)]
@@ -28,12 +46,16 @@ pub struct TypstPluginHandler;
 
 impl SyncPluginHandler<Configuration> for TypstPluginHandler {
     fn plugin_info(&mut self) -> PluginInfo {
+        let version = env!("CARGO_PKG_VERSION").to_string();
         PluginInfo {
             name: env!("CARGO_PKG_NAME").to_string(),
-            version: env!("CARGO_PKG_VERSION").to_string(),
+            version: version.clone(),
             config_key: "typst".to_string(),
-            help_url: "https://github.com/kachick/dprint-plugin-typstyle".to_string(), // fill this in
-            config_schema_url: "".to_string(), // leave this empty for now
+            help_url: "https://github.com/kachick/dprint-plugin-typstyle".to_string(),
+            config_schema_url: format!(
+                "https://plugins.dprint.dev/kachick/typstyle/{}/schema.json",
+                version
+            ),
             update_url: Some("https://plugins.dprint.dev/kachick/typstyle/latest.json".to_string()),
         }
     }
@@ -51,35 +73,36 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
     ) -> PluginResolveConfigurationResult<Configuration> {
         let mut config = config;
         let mut diagnostics = Vec::new();
-        let tab_spaces = get_value(
-            &mut config,
-            "tab_spaces",
-            global_config
-                .indent_width
-                .unwrap_or(typstyle_core::Config::new().tab_spaces as u8),
-            &mut diagnostics,
-        );
 
-        let max_width = get_value(
+        let line_width = get_value(
             &mut config,
-            "column", // Use different name in actual dprint config file to keep backward compatibility. It might be changed in future major/minor version updating.
+            "lineWidth",
             global_config
                 .line_width
                 .unwrap_or(typstyle_core::Config::new().max_width as u32),
             &mut diagnostics,
         );
 
+        let indent_width = get_value(
+            &mut config,
+            "indentWidth",
+            global_config
+                .indent_width
+                .unwrap_or(typstyle_core::Config::new().tab_spaces as u8),
+            &mut diagnostics,
+        );
+
         let blank_lines_upper_bound = get_value(
             &mut config,
-            "blank_lines_upper_bound",
+            "blankLinesUpperBound",
             typstyle_core::Config::new().blank_lines_upper_bound as u32,
             &mut diagnostics,
         );
 
         PluginResolveConfigurationResult {
             config: Configuration {
-                tab_spaces,
-                max_width,
+                line_width,
+                indent_width,
                 blank_lines_upper_bound,
             },
             diagnostics,
@@ -96,14 +119,14 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
         _format_with_host: impl FnMut(SyncHostFormatRequest) -> FormatResult,
     ) -> FormatResult {
         if request.range.is_some() {
-            return Ok(None); // not implemented
+            return Ok(None);
         }
 
         let text = String::from_utf8_lossy(&request.file_bytes);
 
         let config = typstyle_core::Config {
-            tab_spaces: request.config.tab_spaces as usize,
-            max_width: request.config.max_width as usize,
+            tab_spaces: request.config.indent_width as usize,
+            max_width: request.config.line_width as usize,
             blank_lines_upper_bound: request.config.blank_lines_upper_bound as usize,
         };
         let formatter = typstyle_core::Typstyle::new(config);
