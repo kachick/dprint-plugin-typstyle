@@ -5,17 +5,17 @@
     "blankLinesUpperBound": {
       "type": "integer",
       "format": "uint32",
-      "minimum": 0.0
+      "minimum": 0
     },
     "indentWidth": {
       "type": "integer",
       "format": "uint8",
-      "minimum": 0.0
+      "minimum": 0
     },
     "lineWidth": {
       "type": "integer",
       "format": "uint32",
-      "minimum": 0.0
+      "minimum": 0
     }
   },
   "$id": "https://plugins.dprint.dev/kachick/typstyle/0.3.0/schema.json",

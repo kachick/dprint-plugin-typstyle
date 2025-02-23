@@ -46,7 +46,7 @@
                 rust-analyzer
                 clippy
 
-                jq
+                yq-go
               ])
               ++ (with unstables; [
                 dprint
