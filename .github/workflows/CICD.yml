@@ -66,4 +66,4 @@ jobs:
           tree
           mv dist/target/wasm32-unknown-unknown/release/dprint_plugin_typstyle.wasm dist/plugin.wasm
       - run: |
-          gh release create --repo '${{ github.repository }}' --verify-tag "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" dist/plugin.wasm dist/schema.json
+          gh release create --repo '${{ github.repository }}' --verify-tag "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" dist/plugin.wasm dist/deployment/schema.json
