@@ -19,7 +19,7 @@ Minimum
 ```json
 {
   "plugins": [
-    "https://plugins.dprint.dev/kachick/typstyle-0.2.7.wasm"
+    "https://plugins.dprint.dev/kachick/typstyle-0.3.0.wasm"
   ]
 }
 ```
@@ -34,12 +34,12 @@ Customize if necessary
     "blankLinesUpperBound": 5
   },
   "plugins": [
-    "https://plugins.dprint.dev/kachick/typstyle-0.2.7.wasm"
+    "https://plugins.dprint.dev/kachick/typstyle-0.3.0.wasm"
   ]
 }
 ```
 
-## Order of determines the default
+## Order of determines the values
 
 1. typst section in dprint.json
 1. [global config in dprint.json](https://dprint.dev/config/#global-configuration)
