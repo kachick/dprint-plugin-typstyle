@@ -2,6 +2,6 @@
   "typst": {
     "indentWidth": 3,
     "lineWidth": 20,
-    "blankLinesUpperBound": 5,
-  },
+    "blankLinesUpperBound": 5
+  }
 }

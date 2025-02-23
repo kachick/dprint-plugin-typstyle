@@ -46,13 +46,16 @@ pub struct TypstPluginHandler;
 
 impl SyncPluginHandler<Configuration> for TypstPluginHandler {
     fn plugin_info(&mut self) -> PluginInfo {
+        let version = env!("CARGO_PKG_VERSION").to_string();
         PluginInfo {
             name: env!("CARGO_PKG_NAME").to_string(),
-            version: env!("CARGO_PKG_VERSION").to_string(),
+            version: version.clone(),
             config_key: "typst".to_string(),
             help_url: "https://github.com/kachick/dprint-plugin-typstyle".to_string(),
-            config_schema_url: "https://plugins.dprint.dev/kachick/typstyle/schema.json"
-                .to_string(),
+            config_schema_url: format!(
+                "https://plugins.dprint.dev/kachick/typstyle/{}/schema.json",
+                version
+            ),
             update_url: Some("https://plugins.dprint.dev/kachick/typstyle/latest.json".to_string()),
         }
     }
