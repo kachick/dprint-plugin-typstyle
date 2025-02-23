@@ -42,7 +42,8 @@ jobs:
       - name: Upload WASM file as an artifact
         uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
-          name: 'plugins'
+          if-no-files-found: error
+          name: 'dist'
           path: |
             target/wasm32-unknown-unknown/release/dprint_plugin_typstyle.wasm
             deployment/schema.json
