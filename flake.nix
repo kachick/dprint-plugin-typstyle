@@ -1,7 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
-    unstable-nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable"; # Use nixos-unstable after applying https://nixpk.gs/pr-tracker.html?pr=382774
+    unstable-nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     selfup = {
       url = "github:kachick/selfup/v1.1.9";
       inputs.nixpkgs.follows = "nixpkgs";
