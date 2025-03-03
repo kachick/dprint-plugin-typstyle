@@ -8,7 +8,7 @@ license = "Apache-2.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-anyhow = "1.0.96"
+anyhow = "1.0.97"
 dprint-core = { version = "0.67.3", features = ["wasm"] }
 schemars = "0.8.21"
 serde = { version = "1.0", features = ["derive"] }
