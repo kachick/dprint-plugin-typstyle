@@ -35,11 +35,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
-      # Installing rust toolchain to setup envs for rust-cache action even if using Nix
-      - run: rustup toolchain install '1.82.0' --profile minimal # selfup {"extract":"\\d[^']+","replacer":["rustc", "--version"], "nth": 2}
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@e50d5f73bfe71c2dd0aa4218de8f4afa59f8f81d # v16
-      - uses: Swatinem/rust-cache@f0deed1e0edfc6a9be95417288c0e1099b1eeec3 # v2
       - run: nix develop --command task build
       - name: Upload WASM file as an artifact
         uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
@@ -54,15 +51,12 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
-      # Installing rust toolchain to setup envs for rust-cache action even if using Nix
-      - run: rustup toolchain install '1.82.0' --profile minimal # selfup {"extract":"\\d[^']+","replacer":["rustc", "--version"], "nth": 2}
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@e50d5f73bfe71c2dd0aa4218de8f4afa59f8f81d # v16
       - run: nix develop --command echo 'This step should be done before any other "nix develop" steps because of measuring Nix build time'
       - run: nix flake check
       - run: nix flake show
       - run: nix develop --command task deps
-      - uses: Swatinem/rust-cache@f0deed1e0edfc6a9be95417288c0e1099b1eeec3 # v2
       - run: nix develop --command task validate-jsonschema
 
   CICD:
