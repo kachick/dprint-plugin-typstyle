@@ -37,15 +37,7 @@
                 nixfmt-rfc-style
                 nil
                 go-task
-
                 typos
-
-                rustc
-                cargo
-                rustfmt
-                rust-analyzer
-                clippy
-
                 yq-go
               ])
               ++ (with unstables; [
@@ -53,10 +45,15 @@
                 typst
                 typstyle
                 jsonschema-cli
+                rustc
+                cargo
+                rustfmt
+                rust-analyzer
+                clippy
               ])
               ++ [ selfup.packages.${system}.default ];
 
-            nativeBuildInputs = with pkgs; [
+            nativeBuildInputs = with unstables; [
               rustc-wasm32.llvmPackages.bintools # rust-lld
             ];
 
