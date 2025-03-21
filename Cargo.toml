@@ -21,3 +21,7 @@ typstyle-core = { version = "0.13.0", default-features = false }
 
 [lib]
 crate-type = ["lib", "cdylib"]
+
+[workspace]
+resolver = "2"
+members = ["generate_json_schema"]
