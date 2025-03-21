@@ -18,6 +18,6 @@
       "minimum": 0
     }
   },
-  "$id": "https://plugins.dprint.dev/kachick/typstyle/0.3.0/schema.json",
+  "$id": "https://plugins.dprint.dev/kachick/typstyle/0.3.1/schema.json",
   "additionalProperties": false
 }
