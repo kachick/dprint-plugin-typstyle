@@ -34,6 +34,8 @@ pub struct Configuration {
 
     // None in dprint
     pub blank_lines_upper_bound: u32,
+    // Expose this field after the feature removes "Experimental" flag
+    // pub reorder_import_items: bool,
 }
 
 pub fn generate_json_schema() -> String {
@@ -128,6 +130,7 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
             tab_spaces: request.config.indent_width as usize,
             max_width: request.config.line_width as usize,
             blank_lines_upper_bound: request.config.blank_lines_upper_bound as usize,
+            reorder_import_items: false,
         };
         let formatter = typstyle_core::Typstyle::new(config);
 
