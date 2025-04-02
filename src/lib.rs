@@ -49,13 +49,14 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
     ) -> PluginResolveConfigurationResult<Configuration> {
         let mut config = config;
         let mut diagnostics = Vec::new();
+        let typestyle_defaults = typstyle_core::Config::new();
 
         let line_width = get_value(
             &mut config,
             "lineWidth",
             global_config
                 .line_width
-                .unwrap_or(typstyle_core::Config::new().max_width as u32),
+                .unwrap_or(typestyle_defaults.max_width as u32),
             &mut diagnostics,
         );
 
@@ -64,14 +65,14 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
             "indentWidth",
             global_config
                 .indent_width
-                .unwrap_or(typstyle_core::Config::new().tab_spaces as u8),
+                .unwrap_or(typestyle_defaults.tab_spaces as u8),
             &mut diagnostics,
         );
 
         let blank_lines_upper_bound = get_value(
             &mut config,
             "blankLinesUpperBound",
-            typstyle_core::Config::new().blank_lines_upper_bound as u32,
+            typestyle_defaults.blank_lines_upper_bound as u32,
             &mut diagnostics,
         );
 
