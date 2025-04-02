@@ -108,14 +108,10 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
         };
         let formatter = typstyle_core::Typstyle::new(config);
 
-        let result = formatter
-            .format_content(text.as_ref())
-            .unwrap_or_else(|_| text.to_string());
-
-        if result == text {
-            Ok(None)
-        } else {
-            Ok(Some(result.into()))
+        match formatter.format_content(text.as_ref()) {
+            Ok(result) if result != text => Ok(Some(result.into())),
+            Ok(_) => Ok(None),
+            Err(err) => Err(anyhow::anyhow!("Formatting failed: {}", err)),
         }
     }
 
