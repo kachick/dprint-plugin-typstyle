@@ -27,3 +27,11 @@ pub fn generate_json_schema() -> String {
     let schema = schema_for!(Configuration);
     serde_json::to_string_pretty(&schema).unwrap()
 }
+
+#[test]
+fn test_generate_json_schema() {
+    let schema = generate_json_schema();
+    assert!(schema.contains(r#""lineWidth":"#));
+    assert!(schema.contains(r#""indentWidth":"#));
+    assert!(schema.contains(r#""blankLinesUpperBound":"#));
+}
