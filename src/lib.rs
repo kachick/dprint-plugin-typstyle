@@ -1,20 +1,12 @@
-use dprint_core::plugins::FileMatchingInfo;
-use dprint_core::plugins::FormatResult;
-use dprint_core::plugins::PluginInfo;
-use dprint_core::plugins::PluginResolveConfigurationResult;
-use dprint_core::plugins::SyncFormatRequest;
-use dprint_core::plugins::SyncHostFormatRequest;
+use dprint_core::configuration::{get_value, ConfigKeyMap, GlobalConfiguration};
+use dprint_core::plugins::{
+    FileMatchingInfo, FormatResult, PluginInfo, PluginResolveConfigurationResult,
+    SyncFormatRequest, SyncHostFormatRequest, SyncPluginHandler,
+};
 
 use anyhow::Result;
-use dprint_core::configuration::get_value;
-use dprint_core::configuration::ConfigKeyMap;
-use dprint_core::configuration::GlobalConfiguration;
-#[cfg(target_arch = "wasm32")]
-use dprint_core::generate_plugin_code;
-use dprint_core::plugins::SyncPluginHandler;
 
 pub mod configuration;
-
 use configuration::Configuration;
 
 #[derive(Default)]
@@ -123,6 +115,9 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
         Ok(Vec::new())
     }
 }
+
+#[cfg(target_arch = "wasm32")]
+use dprint_core::generate_plugin_code;
 
 #[cfg(target_arch = "wasm32")]
 generate_plugin_code!(TypstPluginHandler, TypstPluginHandler, Configuration);
