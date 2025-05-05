@@ -97,8 +97,8 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
             tab_spaces: request.config.indent_width as usize,
             max_width: request.config.line_width as usize,
             blank_lines_upper_bound: request.config.blank_lines_upper_bound as usize,
-            reorder_import_items: false,
-            wrap_text: false,
+            reorder_import_items: true, // by v0.13.4 default
+            wrap_text: false,           // by v0.13.4 default
         };
         let formatter = typstyle_core::Typstyle::new(config);
 
