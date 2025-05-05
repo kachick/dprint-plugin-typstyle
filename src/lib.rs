@@ -1,4 +1,4 @@
-use dprint_core::configuration::{get_value, ConfigKeyMap, GlobalConfiguration};
+use dprint_core::configuration::{ConfigKeyMap, GlobalConfiguration, get_value};
 use dprint_core::plugins::{
     FileMatchingInfo, FormatResult, PluginInfo, PluginResolveConfigurationResult,
     SyncFormatRequest, SyncHostFormatRequest, SyncPluginHandler,
@@ -98,6 +98,7 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
             max_width: request.config.line_width as usize,
             blank_lines_upper_bound: request.config.blank_lines_upper_bound as usize,
             reorder_import_items: false,
+            wrap_text: false,
         };
         let formatter = typstyle_core::Typstyle::new(config);
 

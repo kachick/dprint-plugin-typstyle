@@ -1,4 +1,4 @@
-use schemars::{schema_for, JsonSchema};
+use schemars::{JsonSchema, schema_for};
 use serde::Serialize;
 
 #[derive(Clone, Serialize)]
@@ -19,8 +19,9 @@ pub struct Configuration {
 
     // None in dprint
     pub blank_lines_upper_bound: u32,
-    // Expose this field after the feature removes "Experimental" flag
+    // TODO: Expose following flags
     // pub reorder_import_items: bool,
+    // pub wrap_text
 }
 
 pub fn generate_json_schema() -> String {
