@@ -19,8 +19,9 @@ pub struct Configuration {
 
     // None in dprint
     pub blank_lines_upper_bound: u32,
-    // Expose this field after updating to 0.13.4 or later, "Experimental" flag was removed in that version
+    // TODO: Expose this fields
     // pub reorder_import_items: bool,
+    // pub wrap_text: bool,
 }
 
 pub fn generate_json_schema() -> String {
