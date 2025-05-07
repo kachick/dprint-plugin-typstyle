@@ -1,7 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
-    unstable-nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     selfup = {
       url = "github:kachick/selfup/v1.1.9";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -12,7 +11,6 @@
     {
       self,
       nixpkgs,
-      unstable-nixpkgs,
       selfup,
     }:
     let
@@ -20,12 +18,11 @@
       forAllSystems = lib.genAttrs lib.systems.flakeExposed;
     in
     {
-      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-rfc-style);
+      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-tree);
       devShells = forAllSystems (
         system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
-          unstables = unstable-nixpkgs.legacyPackages.${system};
         in
         {
           default = pkgs.mkShell {
@@ -39,8 +36,7 @@
                 go-task
                 typos
                 yq-go
-              ])
-              ++ (with unstables; [
+
                 dprint
                 typst
                 typstyle
@@ -53,7 +49,7 @@
               ])
               ++ [ selfup.packages.${system}.default ];
 
-            nativeBuildInputs = with unstables; [
+            nativeBuildInputs = with pkgs; [
               rustc-wasm32.llvmPackages.bintools # rust-lld
             ];
 
