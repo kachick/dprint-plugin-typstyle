@@ -24,6 +24,6 @@
       "type": "boolean"
     }
   },
-  "$id": "https://plugins.dprint.dev/kachick/typstyle/0.3.3/schema.json",
+  "$id": "https://plugins.dprint.dev/kachick/typstyle/0.3.4/schema.json",
   "additionalProperties": false
 }
