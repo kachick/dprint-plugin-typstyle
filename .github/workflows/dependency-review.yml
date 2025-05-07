@@ -14,7 +14,3 @@ jobs:
         uses: actions/checkout@v4
       - name: 'Dependency Review'
         uses: actions/dependency-review-action@ce3cf9537a52e8119d91fd484ab5b8a807627bf8 # v4.6.0
-        with:
-          # https://spdx.org/licenses/
-          allow-licenses: MIT, BSD-3-Clause, BSD-2-Clause, 0BSD, Unlicense, ISC, Apache-2.0, CC-BY-4.0
-          allow-dependencies-licenses: pkg:githubactions/DeterminateSystems/nix-installer-action, pkg:githubactions/Swatinem/rust-cache, pkg:githubactions/arduino/setup-task
