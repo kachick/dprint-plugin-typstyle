@@ -1,4 +1,4 @@
-use dprint_core::configuration::{get_value, ConfigKeyMap, GlobalConfiguration};
+use dprint_core::configuration::{ConfigKeyMap, GlobalConfiguration, get_value};
 use dprint_core::plugins::{
     FileMatchingInfo, FormatResult, PluginInfo, PluginResolveConfigurationResult,
     SyncFormatRequest, SyncHostFormatRequest, SyncPluginHandler,
@@ -92,12 +92,14 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
         }
 
         let text = String::from_utf8_lossy(&request.file_bytes);
+        let typestyle_defaults = typstyle_core::Config::new(); // TODO: Should be done in resolve_config
 
         let config = typstyle_core::Config {
             tab_spaces: request.config.indent_width as usize,
             max_width: request.config.line_width as usize,
             blank_lines_upper_bound: request.config.blank_lines_upper_bound as usize,
-            reorder_import_items: false,
+            reorder_import_items: typestyle_defaults.reorder_import_items,
+            wrap_text: typestyle_defaults.wrap_text,
         };
         let formatter = typstyle_core::Typstyle::new(config);
 
