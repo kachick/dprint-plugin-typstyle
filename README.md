@@ -43,7 +43,7 @@ Customize if necessary
 
 1. typst section in dprint.json
 1. [global config in dprint.json](https://dprint.dev/config/#global-configuration)
-1. [default values in typstyle-core](https://github.com/Enter-tainer/typstyle/blob/v0.13.5/crates/typstyle-core/src/config.rs#L4-L16)
+1. [default values in typstyle-core](https://github.com/Enter-tainer/typstyle/blob/v0.13.5/crates/typstyle-core/src/config.rs#L18-L28)
 
 ## Relationships of the option names
 
