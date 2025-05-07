@@ -16,6 +16,12 @@
       "type": "integer",
       "format": "uint32",
       "minimum": 0
+    },
+    "reorderImportItems": {
+      "type": "boolean"
+    },
+    "wrapText": {
+      "type": "boolean"
     }
   },
   "$id": "https://plugins.dprint.dev/kachick/typstyle/0.3.3/schema.json",
