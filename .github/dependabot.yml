@@ -10,3 +10,8 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    ignore:
+      - dependency-name: 'typstyle-core'
+        versions:
+          # https://github.com/kachick/dprint-plugin-typstyle/pull/126#issuecomment-2852635541 => https://github.com/Enter-tainer/typstyle/issues/275
+          - '0.13.4'
