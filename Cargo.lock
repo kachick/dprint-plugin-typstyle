@@ -428,6 +428,26 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a38c90d48152c236a3ab59271da4f4ae63d678c5d7ad6b7714d7cb9760be5e4b"
 
 [[package]]
+name = "thiserror"
+version = "2.0.12"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "567b8a2dae586314f7be2a752ec7474332959c6460e02bde30d702a66d488708"
+dependencies = [
+ "thiserror-impl",
+]
+
+[[package]]
+name = "thiserror-impl"
+version = "2.0.12"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7f7cf42b4507d8ea322120659672cf1b9dbb93f8f2d4ecfd6e51350ff5b17a1d"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "toml"
 version = "0.8.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -512,15 +532,18 @@ dependencies = [
 
 [[package]]
 name = "typstyle-core"
-version = "0.13.3"
+version = "0.13.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "64fafddba8b7f41ed38f1f1533443d93b49bb7b5960cd8b24012a15780e8f925"
+checksum = "01c5602ac848951c39205e80a2104001c32dc9bf69d8e46240894d6d48facdff"
 dependencies = [
  "ecow",
  "itertools",
  "pretty",
  "rustc-hash 2.0.0",
+ "smallvec",
+ "thiserror",
  "typst-syntax",
+ "unicode-width",
 ]
 
 [[package]]
