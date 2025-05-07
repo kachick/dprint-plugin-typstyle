@@ -47,7 +47,7 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             target/
-          key: ${{ runner.os }}-flake-${{ hashFiles('flake.lock', '*.nix') }}-cargo-${{ hashFiles('Cargo.lock') }}
+          key: ${{ runner.os }}-flake-${{ hashFiles('flake.lock', '**/*.nix') }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-flake-${{ hashFiles('flake.lock', '**/*.nix') }}-
       - run: nix develop --command task build
       - name: Upload WASM file as an artifact
