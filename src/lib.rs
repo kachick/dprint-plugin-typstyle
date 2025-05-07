@@ -98,7 +98,7 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
             max_width: request.config.line_width as usize,
             blank_lines_upper_bound: request.config.blank_lines_upper_bound as usize,
             reorder_import_items: true, // by v0.13.4 default
-            wrap_text: false,           // by v0.13.4 default
+            wrap_text: true, // false by v0.13.4 default, however enablind. because disabling makes weird formatting
         };
         let formatter = typstyle_core::Typstyle::new(config);
 
