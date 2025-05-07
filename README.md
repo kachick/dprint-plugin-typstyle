@@ -19,7 +19,7 @@ Minimum
 ```json
 {
   "plugins": [
-    "https://plugins.dprint.dev/kachick/typstyle-0.3.3.wasm"
+    "https://plugins.dprint.dev/kachick/typstyle-0.3.4.wasm"
   ]
 }
 ```
@@ -34,7 +34,7 @@ Customize if necessary
     "blankLinesUpperBound": 5
   },
   "plugins": [
-    "https://plugins.dprint.dev/kachick/typstyle-0.3.3.wasm"
+    "https://plugins.dprint.dev/kachick/typstyle-0.3.4.wasm"
   ]
 }
 ```
@@ -47,8 +47,14 @@ Customize if necessary
 
 ## Relationships of the option names
 
-| dprint-plugin-typstyle | dprint global config | typstyle-core           | typstyle CLI |
-| ---------------------- | -------------------- | ----------------------- | ------------ |
-| lineWidth              | lineWidth            | max_width               | column       |
-| indentWidth            | indentWidth          | tab_spaces              | tab-width    |
-| blankLinesUpperBound   | `none`               | blank_lines_upper_bound | `none`       |
+| dprint-plugin-typstyle | dprint global config | typstyle-core           | typstyle CLI                      |
+| ---------------------- | -------------------- | ----------------------- | --------------------------------- |
+| lineWidth              | lineWidth            | max_width               | column                            |
+| indentWidth            | indentWidth          | tab_spaces              | tab-width                         |
+| blankLinesUpperBound   | `none`               | blank_lines_upper_bound | `none`                            |
+| reorderImportItems     | `none`               | reorder_import_items    | no-reorder-import-items # disable |
+| wrapText               | `none`               | wrap_text               | wrap-text                         |
+
+## Versioning
+
+Versions are updated based on changes in dprint and typestyle-core, and do not correspond to upstream version numbers.
