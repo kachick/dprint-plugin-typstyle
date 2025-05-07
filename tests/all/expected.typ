@@ -21,9 +21,17 @@
    leading: 0.52em,
 )
 
-This line has spaces.
+This line has
+spaces.
 
-This line is much much much much much much much much much much much much much much much much much much much much much much much much much much long.
+This line is much
+much much much much
+much much much much
+much much much much
+much much much much
+much much much much
+much much much much
+much long.
 
 #set rect(
    width: 100%,
@@ -33,8 +41,13 @@ This line is much much much much much much much much much much much much much mu
 )
 
 = Introduction
-In this report, we will explore the
-various factors that influence fluid
-dynamics in glaciers and how they
-contribute to the formation and
-behaviour of these natural structures.
+In this report, we
+will explore the
+various factors that
+influence fluid
+dynamics in glaciers
+and how they
+contribute to the
+formation and
+behaviour of these
+natural structures.
