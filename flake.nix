@@ -19,6 +19,18 @@
     in
     {
       formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-tree);
+
+      packages = forAllSystems (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        rec {
+          dprint-plugin-typstyle = pkgs.callPackage ./package.nix { };
+          default = dprint-plugin-typstyle;
+        }
+      );
+
       devShells = forAllSystems (
         system:
         let
