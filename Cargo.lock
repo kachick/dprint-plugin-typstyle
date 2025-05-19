@@ -528,9 +528,9 @@ dependencies = [
 
 [[package]]
 name = "typstyle-core"
-version = "0.13.6"
+version = "0.13.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4f81142d03fd95d6457796aabf051dfa20749b16a84269598b0ceee5bb7150a6"
+checksum = "a5b33258d7c12eeefb997754cc988a9736d61a350d8b943b553668363c560cff"
 dependencies = [
  "ecow",
  "itertools",
