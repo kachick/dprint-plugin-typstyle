@@ -48,9 +48,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib
-    cp target/${wasmTarget}/release/dprint_plugin_typstyle.wasm $out/lib/plugin.wasm
-    cp schema.json $out/lib/
+    mkdir -p "$out/lib" "$out/share"
+    cp target/${wasmTarget}/release/dprint_plugin_typstyle.wasm "$out/lib/plugin.wasm"
+    cp schema.json $out/share/
 
     runHook postInstall
   '';
@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   installCheckPhase = ''
     runHook preInstallCheck
 
-    SCHEMA_PATH="$out/lib/schema.json" VERSION='${finalAttrs.version}' bash "$src/scripts/test-jsonschema.bash"
+    SCHEMA_PATH="$out/share/schema.json" VERSION='${finalAttrs.version}' bash "$src/scripts/test-jsonschema.bash"
 
     cd "$(mktemp --directory)"
     dprint check --allow-no-files --plugins "$out/lib/plugin.wasm"
