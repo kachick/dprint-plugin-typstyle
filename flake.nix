@@ -47,6 +47,7 @@
               typst
               typstyle
               jsonschema-cli
+              gnugrep
               rustc
               cargo
               rustfmt

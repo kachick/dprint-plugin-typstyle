@@ -37,7 +37,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     yq-go
   ];
 
-  # https://gburghoorn.com/posts/just-nix-rust-wasm/
   buildPhase = ''
     runHook preBuild
 
