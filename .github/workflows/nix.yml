@@ -49,15 +49,15 @@ jobs:
             target/
           key: ${{ runner.os }}-flake-${{ hashFiles('flake.lock', '**/*.nix') }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-flake-${{ hashFiles('flake.lock', '**/*.nix') }}-
-      - run: nix develop --command task build
+      - run: nix build
+      - run: tree -h result/
       - name: Upload WASM file as an artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           if-no-files-found: error
           name: 'dist'
           path: |
-            target/wasm32-unknown-unknown/release/dprint_plugin_typstyle.wasm
-            deployment/schema.json
+            result/share
 
   flake:
     runs-on: ubuntu-24.04
