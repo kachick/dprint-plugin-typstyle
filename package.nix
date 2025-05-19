@@ -25,7 +25,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ./Cargo.lock
       ./LICENSE
       ./scripts
-      ./deployment
       ./tests
     ];
   };
@@ -40,7 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    bash "$src/scripts/normalize_json_schema.bash"
+    bash "$src/scripts/normalize_json_schema.bash" > schema.json
     cargo build --release --target=${wasmTarget}
 
     runHook postBuild
@@ -51,7 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     mkdir -p $out/lib
     cp target/${wasmTarget}/release/dprint_plugin_typstyle.wasm $out/lib/plugin.wasm
-    cp deployment/schema.json $out/lib/
+    cp schema.json $out/lib/
 
     runHook postInstall
   '';
@@ -69,9 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   installCheckPhase = ''
     runHook preInstallCheck
 
-    export SCHEMA_PATH="$out/lib/schema.json"
-    bash "$src/scripts/test-jsonschema.bash"
-    grep --quiet --fixed-strings '${finalAttrs.version}' "$SCHEMA_PATH"
+    SCHEMA_PATH="$out/lib/schema.json" VERSION='${finalAttrs.version}' bash "$src/scripts/test-jsonschema.bash"
 
     cd "$(mktemp --directory)"
     dprint check --allow-no-files --plugins "$out/lib/plugin.wasm"
