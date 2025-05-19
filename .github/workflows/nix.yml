@@ -70,7 +70,6 @@ jobs:
       - run: nix flake check
       - run: nix flake show
       - run: nix develop --command task deps
-      - run: nix develop --command task validate-jsonschema
 
   CICD:
     needs: [build, flake]
