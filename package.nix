@@ -1,7 +1,12 @@
 {
-  pkgs,
   lib,
   rustPlatform,
+  rustc-wasm32,
+  dprint,
+  writableTmpDirAsHomeHook,
+  jsonschema-cli,
+  yq-go,
+  gnugrep,
 }:
 
 let
@@ -21,12 +26,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ./LICENSE
       ./scripts
       ./deployment
+      ./tests
     ];
   };
 
   cargoLock.lockFile = ./Cargo.lock;
 
-  nativeBuildInputs = with pkgs; [
+  nativeBuildInputs = [
     rustc-wasm32.llvmPackages.bintools # rust-lld
     yq-go
   ];
@@ -51,8 +57,31 @@ rustPlatform.buildRustPackage (finalAttrs: {
     runHook postInstall
   '';
 
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    dprint
+    writableTmpDirAsHomeHook
+    jsonschema-cli
+    yq-go
+    gnugrep
+  ];
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    export SCHEMA_PATH="$out/lib/schema.json"
+    bash "$src/scripts/test-jsonschema.bash"
+    grep --quiet --fixed-strings '${finalAttrs.version}' "$SCHEMA_PATH"
+
+    cd "$(mktemp --directory)"
+    dprint check --allow-no-files --plugins "$out/lib/plugin.wasm"
+
+    runHook postInstallCheck
+  '';
+
   meta = {
-    description = "Typst formatter plugin for dprint";
+    description = "Dprint Wasm plugin for Typst";
     homepage = "https://github.com/kachick/dprint-plugin-typstyle";
     license = lib.licenses.asl20;
   };
