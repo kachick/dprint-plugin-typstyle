@@ -63,7 +63,12 @@
             # Adding packages like binutils is not enough
             #
             # https://github.com/NixOS/nixpkgs/issues/70238
-            CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER = "lld";
+            env = {
+              CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER = "lld";
+
+              # Workaround for rust-analyzer error
+              RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}";
+            };
           };
         }
       );
