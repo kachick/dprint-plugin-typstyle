@@ -2,11 +2,11 @@
   "nodes": {
     "nixpkgs": {
       "locked": {
-        "lastModified": 1746904237,
-        "narHash": "sha256-3e+AVBczosP5dCLQmMoMEogM57gmZ2qrVSrmq9aResQ=",
+        "lastModified": 1747542820,
+        "narHash": "sha256-GaOZntlJ6gPPbbkTLjbd8BMWaDYafhuuYRNrxCGnPJw=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "d89fc19e405cb2d55ce7cc114356846a0ee5e956",
+        "rev": "292fa7d4f6519c074f0a50394dbbe69859bb6043",
         "type": "github"
       },
       "original": {
@@ -18,29 +18,7 @@
     },
     "root": {
       "inputs": {
-        "nixpkgs": "nixpkgs",
-        "selfup": "selfup"
-      }
-    },
-    "selfup": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1736841604,
-        "narHash": "sha256-iEBjUiwg4H2eCfnPuQf+lXSsVmRHi/RvC6EE798NYy8=",
-        "owner": "kachick",
-        "repo": "selfup",
-        "rev": "78de5a4e1c137f05d5c510c038fe868b49924c46",
-        "type": "github"
-      },
-      "original": {
-        "owner": "kachick",
-        "ref": "v1.1.9",
-        "repo": "selfup",
-        "type": "github"
+        "nixpkgs": "nixpkgs"
       }
     }
   },

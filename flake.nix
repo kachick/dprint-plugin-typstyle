@@ -1,17 +1,12 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    selfup = {
-      url = "github:kachick/selfup/v1.1.9";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =
     {
       self,
       nixpkgs,
-      selfup,
     }:
     let
       lib = nixpkgs.lib;
@@ -38,28 +33,26 @@
         in
         {
           default = pkgs.mkShell {
-            buildInputs =
-              (with pkgs; [
-                bashInteractive
-                findutils # xargs
-                diffutils # for E2E test
-                nixfmt-rfc-style
-                nil
-                go-task
-                typos
-                yq-go
+            buildInputs = with pkgs; [
+              bashInteractive
+              findutils # xargs
+              diffutils # for E2E test
+              nixfmt-rfc-style
+              nil
+              go-task
+              typos
+              yq-go
 
-                dprint
-                typst
-                typstyle
-                jsonschema-cli
-                rustc
-                cargo
-                rustfmt
-                rust-analyzer
-                clippy
-              ])
-              ++ [ selfup.packages.${system}.default ];
+              dprint
+              typst
+              typstyle
+              jsonschema-cli
+              rustc
+              cargo
+              rustfmt
+              rust-analyzer
+              clippy
+            ];
 
             nativeBuildInputs = with pkgs; [
               rustc-wasm32.llvmPackages.bintools # rust-lld
