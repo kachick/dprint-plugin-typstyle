@@ -57,7 +57,7 @@ jobs:
           if-no-files-found: error
           name: 'dist'
           path: |
-            result/share
+            result/lib
 
   flake:
     runs-on: ubuntu-24.04

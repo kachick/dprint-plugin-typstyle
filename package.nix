@@ -44,9 +44,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share
-    cp target/${wasmTarget}/release/dprint_plugin_typstyle.wasm $out/share/plugin.wasm
-    cp deployment/schema.json $out/share/
+    mkdir -p $out/lib
+    cp target/${wasmTarget}/release/dprint_plugin_typstyle.wasm $out/lib/plugin.wasm
+    cp deployment/schema.json $out/lib/
 
     runHook postInstall
   '';
