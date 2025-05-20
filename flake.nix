@@ -14,6 +14,18 @@
     in
     {
       formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-tree);
+
+      packages = forAllSystems (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        rec {
+          dprint-plugin-typstyle = pkgs.callPackage ./package.nix { };
+          default = dprint-plugin-typstyle;
+        }
+      );
+
       devShells = forAllSystems (
         system:
         let
@@ -35,6 +47,7 @@
               typst
               typstyle
               jsonschema-cli
+              gnugrep
               rustc
               cargo
               rustfmt
@@ -50,7 +63,12 @@
             # Adding packages like binutils is not enough
             #
             # https://github.com/NixOS/nixpkgs/issues/70238
-            CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER = "lld";
+            env = {
+              CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER = "lld";
+
+              # Workaround for rust-analyzer error
+              RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}";
+            };
           };
         }
       );
