@@ -71,7 +71,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     SCHEMA_PATH="$out/share/schema.json" VERSION='${finalAttrs.version}' bash "$src/scripts/test-jsonschema.bash"
 
     cd "$(mktemp --directory)"
-    dprint check --allow-no-files --plugins "$out/lib/plugin.wasm"
+    dprint check --allow-no-files --config-discovery=false --plugins "$out/lib/plugin.wasm"
 
     runHook postInstallCheck
   '';
