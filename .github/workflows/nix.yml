@@ -63,7 +63,7 @@ jobs:
       - run: nix develop --command task deps
 
   CICD:
-    needs: [build, flake]
+    needs: [build]
     uses: ./.github/workflows/CICD.yml
     with:
       run_id: '${{ github.run_id }}'
