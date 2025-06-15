@@ -41,7 +41,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh run download '${{ inputs.run_id }}'
-          tree
+          tree dist
       - name: Make sure dependencies
         run: |
           dprint --version
@@ -49,7 +49,7 @@ jobs:
           diff --version
       - name: Test
         env:
-          PLUGIN_DIR: '${{ github.workspace }}/dist/target/wasm32-unknown-unknown/release'
+          PLUGIN_DIR: '${{ github.workspace }}/dist/lib'
           SKIP_BUILD: 'true'
         run:
           task test
@@ -63,7 +63,6 @@ jobs:
     steps:
       - run: |
           gh run download '${{ inputs.run_id }}' --repo '${{ github.repository }}'
-          tree
-          mv dist/target/wasm32-unknown-unknown/release/dprint_plugin_typstyle.wasm dist/plugin.wasm
+          tree dist
       - run: |
-          gh release create --repo '${{ github.repository }}' --verify-tag "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" dist/plugin.wasm dist/deployment/schema.json
+          gh release create --repo '${{ github.repository }}' --verify-tag "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" dist/lib/plugin.wasm dist/share/schema.json

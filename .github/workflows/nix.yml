@@ -37,27 +37,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@21a544727d0c62386e78b4befe52d19ad12692e3 # v17
-      # Don't use Swatinem/rust-cache for adjusting with Nix environment
-      # https://github.com/actions/cache/blob/d4323d4df104b026a6aa633fdb11d772146be0bf/examples.md?plain=1#L610-L622
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ runner.os }}-flake-${{ hashFiles('flake.lock', '**/*.nix') }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: ${{ runner.os }}-flake-${{ hashFiles('flake.lock', '**/*.nix') }}-
-      - run: nix develop --command task build
+      - uses: DeterminateSystems/magic-nix-cache-action@cb3030da0487efd312ad3c07fc4ad1960d35ec60 # v10
+      # Don't use rust caches since using package.nix, rust cachees are only available in devshell workflow.
+      - run: nix build
+      - run: tree -h result/
       - name: Upload WASM file as an artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           if-no-files-found: error
           name: 'dist'
           path: |
-            target/wasm32-unknown-unknown/release/dprint_plugin_typstyle.wasm
-            deployment/schema.json
+            result/lib/plugin.wasm
+            result/share/schema.json
 
   flake:
     runs-on: ubuntu-24.04
@@ -70,10 +61,9 @@ jobs:
       - run: nix flake check
       - run: nix flake show
       - run: nix develop --command task deps
-      - run: nix develop --command task validate-jsonschema
 
   CICD:
-    needs: [build, flake]
+    needs: [build]
     uses: ./.github/workflows/CICD.yml
     with:
       run_id: '${{ github.run_id }}'
