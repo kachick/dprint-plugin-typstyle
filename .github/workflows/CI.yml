@@ -48,7 +48,6 @@ jobs:
             ~/.cargo/registry/index/
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
-            target/
           key: ${{ runner.os }}-flake-${{ hashFiles('flake.lock') }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-flake-${{ hashFiles('flake.lock') }}-
       - run: nix develop --command task
