@@ -3,7 +3,8 @@
 version: '3'
 
 env:
-  PLUGIN_DIR: '{{.USER_WORKING_DIR}}/result/lib'
+  # If test for nix product: `PLUGIN_PATH="$(fd --absolute-path plugin.wasm result)" task test`
+  PLUGIN_PATH: '{{.USER_WORKING_DIR}}/target/wasm32-unknown-unknown/debug/dprint_plugin_typstyle.wasm'
 
 tasks:
   default:
@@ -17,7 +18,8 @@ tasks:
       - |
           [ "$SKIP_BUILD" == 'true' ]
     cmds:
-      - nix build
+      # Omit "--release" for development purpose. Release assets should use `nix build`
+      - cargo build
   check:
     deps:
       - test
@@ -35,15 +37,15 @@ tasks:
     vars:
       TESTNAME: '{{index .MATCH 0}}'
     cmds:
-      - cd 'tests/{{.TESTNAME}}' && dprint check --plugins="$PLUGIN_DIR/plugin.wasm" expected.typ
-      - cd 'tests/{{.TESTNAME}}' && diff <(cat ../raw.typ | dprint fmt --stdin ../raw.typ --plugins="$PLUGIN_DIR/plugin.wasm") expected.typ
+      - cd 'tests/{{.TESTNAME}}' && dprint check --plugins="$PLUGIN_PATH" expected.typ
+      - cd 'tests/{{.TESTNAME}}' && diff <(cat ../raw.typ | dprint fmt --stdin ../raw.typ --plugins="$PLUGIN_PATH") expected.typ
   bump-fixtures-*:
     deps:
       - build
     vars:
       TESTNAME: '{{index .MATCH 0}}'
     cmds:
-      - cd 'tests/{{.TESTNAME}}' && cat ../raw.typ | dprint fmt --stdin ../raw.typ --plugins="$PLUGIN_DIR/plugin.wasm" > expected.typ
+      - cd 'tests/{{.TESTNAME}}' && cat ../raw.typ | dprint fmt --stdin ../raw.typ --plugins="$PLUGIN_PATH" > expected.typ
   bump-fixtures:
     deps:
       - bump-fixtures-default

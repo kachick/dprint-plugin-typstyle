@@ -49,7 +49,7 @@ jobs:
           diff --version
       - name: Test
         env:
-          PLUGIN_DIR: '${{ github.workspace }}/dist/lib'
+          PLUGIN_PATH: '${{ github.workspace }}/dist/lib/plugin.wasm'
           SKIP_BUILD: 'true'
         run:
           task test
