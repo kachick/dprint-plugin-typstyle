@@ -10,7 +10,7 @@ tasks:
   default:
     deps:
       - check
-      - build
+      - test
   build: # Prefer cargo cache rather than go-task cache feature
     env:
       SKIP_BUILD: 'false' # Don't use "$CI" for this purpose
@@ -59,6 +59,7 @@ tasks:
   lint:
     cmds:
       - cargo clippy
+      - cargo fmt --check
       - dprint check
       - typos . .github .vscode
       # nix fmt doesn't have check: https://github.com/NixOS/nix/issues/6918

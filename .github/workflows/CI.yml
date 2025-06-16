@@ -1,0 +1,52 @@
+# Nix sandbox build is much slow and cannot reuse crate cache. So this workflow just uses the devshell likely local development
+name: CI
+on:
+  push:
+    tags:
+      # Do not add v prefix: https://github.com/dprint/plugins/blob/75a3755b8734eee294214a7d7efc18145668a99f/README.md?plain=1#L27
+      # https://github.com/actions/runner/issues/1699#issuecomment-1046796067
+      - '[0-9]+.[0-9]+.[0-9]+'
+    branches: [main]
+    paths:
+      - '.github/workflows/nix.yml'
+      - '**.nix'
+      - 'flake.*'
+      - '**.rs'
+      - 'Cargo.*'
+      - 'example'
+      - 'Taskfile.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/nix.yml'
+      - '**.nix'
+      - 'flake.*'
+      - '**.rs'
+      - 'Cargo.*'
+      - 'example'
+      - 'Taskfile.yml'
+  schedule:
+    # Every 10:42 JST
+    # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule
+    - cron: '42 1 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@21a544727d0c62386e78b4befe52d19ad12692e3 # v17
+      # Don't use Swatinem/rust-cache for adjusting with Nix environment
+      # https://github.com/actions/cache/blob/d4323d4df104b026a6aa633fdb11d772146be0bf/examples.md?plain=1#L610-L622
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-flake-${{ hashFiles('flake.lock', '**/*.nix') }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-flake-${{ hashFiles('flake.lock', '**/*.nix') }}-
+      - run: nix develop --command task
