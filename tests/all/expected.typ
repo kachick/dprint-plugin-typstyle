@@ -51,7 +51,3 @@ contribute to the
 formation and
 behaviour of these
 natural structures.
-
-#let tb = table(
-   [ab c]
-)

@@ -51,7 +51,3 @@ various factors that influence fluid
 dynamics in glaciers and how they
 contribute to the formation and
 behaviour of these natural structures.
-
-#let tb = table(
-  [ab    c],
-)

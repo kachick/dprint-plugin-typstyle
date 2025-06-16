@@ -29,7 +29,6 @@ tasks:
       - test-e2e-default
       - test-e2e-all
       - test-e2e-with_global_config
-      - test-e2e-wrap_except_markup
     # cmds:
     #   - cargo test # There is no test. If adding here, required to update GitHub Actions workflow
   test-e2e-*:
@@ -52,7 +51,6 @@ tasks:
       - bump-fixtures-default
       - bump-fixtures-all
       - bump-fixtures-with_global_config
-      - bump-fixtures-wrap_except_markup
   fmt:
     cmds:
       - cargo fmt
