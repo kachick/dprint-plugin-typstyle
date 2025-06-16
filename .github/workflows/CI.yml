@@ -38,7 +38,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@21a544727d0c62386e78b4befe52d19ad12692e3 # v17
       # Nix layer cache helps tools such as selfup
-      - uses: DeterminateSystems/magic-nix-cache-action@cb3030da0487efd312ad3c07fc4ad1960d35ec60 # v10
+      - uses: DeterminateSystems/magic-nix-cache-action@def9f5a5c6a6b8751c0534e8813a5d0ad2635660 # v11
       # Don't use Swatinem/rust-cache for adjusting with Nix environment
       # https://github.com/actions/cache/blob/d4323d4df104b026a6aa633fdb11d772146be0bf/examples.md?plain=1#L610-L622
       - uses: actions/cache@v4
