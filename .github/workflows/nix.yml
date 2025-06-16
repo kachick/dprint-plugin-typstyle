@@ -62,9 +62,9 @@ jobs:
       - run: nix flake show
       - run: nix develop --command task deps
 
-  CICD:
+  CD:
     needs: [build]
-    uses: ./.github/workflows/CICD.yml
+    uses: ./.github/workflows/CD.yml
     with:
       run_id: '${{ github.run_id }}'
       release: ${{ startsWith(github.ref, 'refs/tags/') }}
