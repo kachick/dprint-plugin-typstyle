@@ -115,10 +115,11 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
             blank_lines_upper_bound: request.config.blank_lines_upper_bound as usize,
             reorder_import_items: request.config.reorder_import_items,
             wrap_text: request.config.wrap_text,
+            collapse_markup_spaces: false, // https://github.com/Enter-tainer/typstyle/blob/655d66ca07adde88a8caa48a2d972ede784ff5d7/crates/typstyle-core/src/config.rs#L27
         };
         let formatter = typstyle_core::Typstyle::new(config);
 
-        match formatter.format_content(text.as_ref()) {
+        match formatter.format_text(text.as_ref()).render() {
             Ok(result) if result != text => Ok(Some(result.into())),
             Ok(_) => Ok(None),
             Err(err) => Err(anyhow::anyhow!("Formatting failed: {}", err)),
