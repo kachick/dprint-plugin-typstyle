@@ -1,6 +1,6 @@
 [package]
 name = "dprint-plugin-typstyle"
-version = "0.3.4"
+version = "0.3.5"
 authors = ["Kenichi Kamiya <kachick1@gmail.com>"]
 edition = "2024"
 license = "Apache-2.0"
