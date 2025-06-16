@@ -82,13 +82,6 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
             &mut diagnostics,
         );
 
-        let collapse_markup_spaces = get_value(
-            &mut config,
-            "collapseMarkupSpaces",
-            typestyle_defaults.collapse_markup_spaces,
-            &mut diagnostics,
-        );
-
         PluginResolveConfigurationResult {
             config: Configuration {
                 line_width,
@@ -96,7 +89,6 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
                 blank_lines_upper_bound,
                 reorder_import_items,
                 wrap_text,
-                collapse_markup_spaces,
             },
             diagnostics,
             file_matching: FileMatchingInfo {
@@ -116,6 +108,7 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
         }
 
         let text = String::from_utf8_lossy(&request.file_bytes);
+        let typestyle_defaults = typstyle_core::Config::new();
 
         let config = typstyle_core::Config {
             tab_spaces: request.config.indent_width as usize,
@@ -123,7 +116,7 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
             blank_lines_upper_bound: request.config.blank_lines_upper_bound as usize,
             reorder_import_items: request.config.reorder_import_items,
             wrap_text: request.config.wrap_text,
-            collapse_markup_spaces: request.config.collapse_markup_spaces, // https://github.com/Enter-tainer/typstyle/blob/655d66ca07adde88a8caa48a2d972ede784ff5d7/crates/typstyle-core/src/config.rs#L27
+            collapse_markup_spaces: typestyle_defaults.collapse_markup_spaces,
         };
         let formatter = typstyle_core::Typstyle::new(config);
 

@@ -10,6 +10,9 @@ use serde::Serialize;
 //   dprint: https://github.com/dprint/dprint/blob/0.49.1/crates/core/src/configuration.rs#L257-L278
 //   typestyle: https://github.com/Enter-tainer/typstyle/blob/v0.13.5/crates/typstyle-core/src/config.rs#L4-L16
 // TODO: Remove required from all options in json schema. See https://github.com/GREsau/schemars/issues/344
+//
+// Don't add "collapse_markup_spaces" to config schema until upstream open it in the CLI
+// See https://github.com/Enter-tainer/typstyle/pull/302#discussion_r2104164153 for detail
 pub struct Configuration {
     // column/max_width in typstyle-core
     pub line_width: u32,
@@ -25,10 +28,6 @@ pub struct Configuration {
 
     // Wrap texts in the markup
     pub wrap_text: bool,
-
-    // See upstream issue for the background: https://github.com/Enter-tainer/typstyle/issues/296
-    // The relevant option `--collapse-spaces` is not a public API in typestyle CLI
-    pub collapse_markup_spaces: bool,
 }
 
 pub fn generate_json_schema() -> String {
