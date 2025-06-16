@@ -3,13 +3,14 @@
 version: '3'
 
 env:
-  PLUGIN_DIR: '{{.USER_WORKING_DIR}}/result/lib'
+  # If test for nix product: `PLUGIN_PATH="$PWD/result/lib/plugin.wasm" task`
+  PLUGIN_PATH: '{{.USER_WORKING_DIR}}/target/wasm32-unknown-unknown/debug/dprint_plugin_typstyle.wasm'
 
 tasks:
   default:
     deps:
       - check
-      - build
+      - test
   build: # Prefer cargo cache rather than go-task cache feature
     env:
       SKIP_BUILD: 'false' # Don't use "$CI" for this purpose
@@ -17,7 +18,8 @@ tasks:
       - |
           [ "$SKIP_BUILD" == 'true' ]
     cmds:
-      - nix build
+      # Omit "--release" for development purpose. Release assets should use `nix build`
+      - cargo build
   check:
     deps:
       - test
@@ -35,15 +37,15 @@ tasks:
     vars:
       TESTNAME: '{{index .MATCH 0}}'
     cmds:
-      - cd 'tests/{{.TESTNAME}}' && dprint check --plugins="$PLUGIN_DIR/plugin.wasm" expected.typ
-      - cd 'tests/{{.TESTNAME}}' && diff <(cat ../raw.typ | dprint fmt --stdin ../raw.typ --plugins="$PLUGIN_DIR/plugin.wasm") expected.typ
+      - cd 'tests/{{.TESTNAME}}' && dprint check --plugins="$PLUGIN_PATH" expected.typ
+      - cd 'tests/{{.TESTNAME}}' && diff <(cat ../raw.typ | dprint fmt --stdin ../raw.typ --plugins="$PLUGIN_PATH") expected.typ
   bump-fixtures-*:
     deps:
       - build
     vars:
       TESTNAME: '{{index .MATCH 0}}'
     cmds:
-      - cd 'tests/{{.TESTNAME}}' && cat ../raw.typ | dprint fmt --stdin ../raw.typ --plugins="$PLUGIN_DIR/plugin.wasm" > expected.typ
+      - cd 'tests/{{.TESTNAME}}' && cat ../raw.typ | dprint fmt --stdin ../raw.typ --plugins="$PLUGIN_PATH" > expected.typ
   bump-fixtures:
     deps:
       - bump-fixtures-default
@@ -57,6 +59,7 @@ tasks:
   lint:
     cmds:
       - cargo clippy
+      - cargo fmt --check
       - dprint check
       - typos . .github .vscode
       # nix fmt doesn't have check: https://github.com/NixOS/nix/issues/6918
