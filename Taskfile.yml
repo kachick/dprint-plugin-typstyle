@@ -3,7 +3,7 @@
 version: '3'
 
 env:
-  # If test for nix product: `PLUGIN_PATH="$(fd --absolute-path plugin.wasm result)" task test`
+  # If test for nix product: `PLUGIN_PATH="$PWD/result/lib/plugin.wasm" task`
   PLUGIN_PATH: '{{.USER_WORKING_DIR}}/target/wasm32-unknown-unknown/debug/dprint_plugin_typstyle.wasm'
 
 tasks:

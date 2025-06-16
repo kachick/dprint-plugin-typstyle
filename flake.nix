@@ -42,7 +42,6 @@
               go-task
               typos
               yq-go
-              fd
 
               dprint
               typst
