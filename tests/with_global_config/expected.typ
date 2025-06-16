@@ -18,7 +18,7 @@
    leading: 0.52em,
 )
 
-This line has spaces.
+This line has              spaces.
 
 This line is much much much much much much much much much much much much much much much much much much much much much much much much much much long.
 

@@ -108,6 +108,7 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
         }
 
         let text = String::from_utf8_lossy(&request.file_bytes);
+        let typestyle_defaults = typstyle_core::Config::new();
 
         let config = typstyle_core::Config {
             tab_spaces: request.config.indent_width as usize,
@@ -115,10 +116,11 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
             blank_lines_upper_bound: request.config.blank_lines_upper_bound as usize,
             reorder_import_items: request.config.reorder_import_items,
             wrap_text: request.config.wrap_text,
+            collapse_markup_spaces: typestyle_defaults.collapse_markup_spaces,
         };
         let formatter = typstyle_core::Typstyle::new(config);
 
-        match formatter.format_content(text.as_ref()) {
+        match formatter.format_text(text.as_ref()).render() {
             Ok(result) if result != text => Ok(Some(result.into())),
             Ok(_) => Ok(None),
             Err(err) => Err(anyhow::anyhow!("Formatting failed: {}", err)),
