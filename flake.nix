@@ -33,6 +33,10 @@
         in
         {
           default = pkgs.mkShell {
+            env = {
+              CARGO_BUILD_TARGET = "wasm32-unknown-unknown";
+            };
+
             buildInputs = with pkgs; [
               bashInteractive
               findutils # xargs
