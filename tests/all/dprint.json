@@ -4,6 +4,7 @@
     "lineWidth": 20,
     "blankLinesUpperBound": 5,
     "reorderImportItems": true,
-    "wrapText": true
+    "wrapText": true,
+    "collapseMarkupSpaces": true
   }
 }
