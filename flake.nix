@@ -38,7 +38,7 @@
               findutils # xargs
               diffutils # for E2E test
               nixfmt-rfc-style
-              nil
+              nixd
               go-task
               typos
               yq-go

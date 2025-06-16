@@ -77,7 +77,6 @@ tasks:
       - rustfmt --version
       - dprint --version
       - nix --version
-      - nil --version
       - nixfmt --version
       - task --version
       - typos --version

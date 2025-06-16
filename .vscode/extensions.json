@@ -5,7 +5,6 @@
     "editorconfig.editorconfig",
     "tekumara.typos-vscode",
     "dprint.dprint",
-    "jnoortheen.nix-ide",
-    "myriad-dreamin.tinymist"
+    "jnoortheen.nix-ide"
   ]
 }
