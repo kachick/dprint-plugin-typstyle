@@ -30,8 +30,8 @@ tasks:
     # cmds:
     #   - cargo test # There is no test. If adding here, required to update GitHub Actions workflow
   test-e2e-*:
-    deps:
-      - build
+    # deps:
+    #   - build
     vars:
       TESTNAME: '{{index .MATCH 0}}'
     cmds:

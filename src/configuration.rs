@@ -25,6 +25,10 @@ pub struct Configuration {
 
     // Wrap texts in the markup
     pub wrap_text: bool,
+
+    // See upstream issue for the background: https://github.com/Enter-tainer/typstyle/issues/296
+    // The relevant option `--collapse-spaces` is not a public API in typestyle CLI
+    pub collapse_markup_spaces: bool,
 }
 
 pub fn generate_json_schema() -> String {
