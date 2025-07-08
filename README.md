@@ -2,7 +2,7 @@
 
 [![CI - Nix Status](https://github.com/kachick/dprint-plugin-typstyle/actions/workflows/nix.yml/badge.svg?branch=main)](https://github.com/kachick/dprint-plugin-typstyle/actions/workflows/nix.yml?query=branch%3Amain+)
 
-[Typst](https://github.com/typst/typst) formatter as a [dprint](https://github.com/dprint/dprint) WASM plugin, powered by [typstyle](https://github.com/Enter-tainer/typstyle)
+[Typst](https://github.com/typst/typst) formatter as a [dprint](https://github.com/dprint/dprint) WASM plugin, powered by [typstyle](https://github.com/typstyle-rs/typstyle)
 
 ## Installation
 
@@ -43,7 +43,7 @@ Customize if necessary
 
 1. typst section in dprint.json
 1. [global config in dprint.json](https://dprint.dev/config/#global-configuration)
-1. [default values in typstyle-core](https://github.com/Enter-tainer/typstyle/blob/v0.13.5/crates/typstyle-core/src/config.rs#L18-L28)
+1. [default values in typstyle-core](https://github.com/typstyle-rs/typstyle/blob/v0.13.5/crates/typstyle-core/src/config.rs#L18-L28)
 
 ## Relationships of the option names
 
