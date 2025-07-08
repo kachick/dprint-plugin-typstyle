@@ -4,7 +4,10 @@
 
   size: 10pt,
 )
-#set page(paper: "a6", margin: (x: 1.8cm, y: 1.5cm))
+#set page(
+  paper: "a6",
+  margin: (x: 1.8cm, y: 1.5cm),
+)
 #set par(
   justify: true,
 
