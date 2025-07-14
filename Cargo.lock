@@ -85,7 +85,7 @@ dependencies = [
  "rustc-hash",
  "serde",
  "serde_json",
- "unicode-width 0.2.0",
+ "unicode-width",
 ]
 
 [[package]]
@@ -235,14 +235,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "350e9b48cbc6b0e028b0473b114454c6316e57336ee184ceab6e53f72c178b3e"
 
 [[package]]
-name = "pretty"
-version = "0.12.4"
+name = "prettyless"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ac98773b7109bc75f475ab5a134c9b64b87e59d776d31098d8f346922396a477"
+checksum = "d03ccf1cbd64d88883e4d9363b8ba202cdce66b7bec175233c8b157e772b1165"
 dependencies = [
  "arrayvec",
  "typed-arena",
- "unicode-width 0.1.14",
+ "unicode-width",
 ]
 
 [[package]]
@@ -549,18 +549,18 @@ dependencies = [
 
 [[package]]
 name = "typstyle-core"
-version = "0.13.13"
+version = "0.13.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6fdbaa7defbe7c4267e900f3eeffa2f90fbfbc59eed1b2a7db5603a3545d7168"
+checksum = "a731776328e7f494ab9db9b15152530b5833537666978f12fa0b8d6020a1dfc1"
 dependencies = [
  "ecow",
  "itertools",
- "pretty",
+ "prettyless",
  "rustc-hash",
  "smallvec",
  "thiserror",
  "typst-syntax",
- "unicode-width 0.1.14",
+ "unicode-width",
 ]
 
 [[package]]
@@ -586,12 +586,6 @@ name = "unicode-segmentation"
 version = "1.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f6ccf251212114b54433ec949fd6a7841275f9ada20dddd2f29e9ceea4501493"
-
-[[package]]
-name = "unicode-width"
-version = "0.1.14"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7dd6e30e90baa6f72411720665d41d89b9a3d039dc45b8faea1ddd07f617f6af"
 
 [[package]]
 name = "unicode-width"
