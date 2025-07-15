@@ -19,7 +19,7 @@ Minimum
 ```json
 {
   "plugins": [
-    "https://plugins.dprint.dev/kachick/typstyle-0.3.6.wasm"
+    "https://plugins.dprint.dev/kachick/typstyle-0.3.7.wasm"
   ]
 }
 ```
@@ -34,7 +34,7 @@ Customize if necessary
     "blankLinesUpperBound": 5
   },
   "plugins": [
-    "https://plugins.dprint.dev/kachick/typstyle-0.3.6.wasm"
+    "https://plugins.dprint.dev/kachick/typstyle-0.3.7.wasm"
   ]
 }
 ```
