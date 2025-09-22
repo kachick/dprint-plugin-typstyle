@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: dprint/check@9cb3a2b17a8e606d37aae341e49df3654933fc23 # v2.3
         with:
-          dprint-version: '0.50.1' # selfup {"extract":"\\d[^']+","replacer":["dprint", "--version"], "nth": 2}
+          dprint-version: '0.50.2' # selfup {"extract":"\\d[^']+","replacer":["dprint", "--version"], "nth": 2}
 
   typos:
     timeout-minutes: 15
