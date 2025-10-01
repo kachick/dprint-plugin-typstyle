@@ -35,7 +35,7 @@ jobs:
       - name: Install Task
         uses: arduino/setup-task@v2
         with:
-          version: '3.44.1' # selfup {"extract":"\\d\\.\\d+\\.\\d+","replacer":["task", "--version"]}
+          version: '3.45.4' # selfup {"extract":"\\d\\.\\d+\\.\\d+","replacer":["task", "--version"]}
       - name: Download pre-built plugin
         env:
           GH_TOKEN: ${{ github.token }}
