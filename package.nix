@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  rustc-wasm32,
+  rustc,
   dprint,
   writableTmpDirAsHomeHook,
   jsonschema-cli,
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoLock.lockFile = ./Cargo.lock;
 
   nativeBuildInputs = [
-    rustc-wasm32.llvmPackages.bintools # rust-lld
+    rustc.llvmPackages.bintools # rust-lld
     yq-go
   ];
 

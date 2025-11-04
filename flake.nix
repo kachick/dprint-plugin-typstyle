@@ -57,7 +57,7 @@
             ];
 
             nativeBuildInputs = with pkgs; [
-              rustc-wasm32.llvmPackages.bintools # rust-lld
+              rustc.llvmPackages.bintools # rust-lld
             ];
 
             env = {
