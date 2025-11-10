@@ -36,9 +36,11 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v5
-      - uses: DeterminateSystems/nix-installer-action@786fff0690178f1234e4e1fe9b536e94f5433196 # v20
-      # Nix layer cache helps tools such as selfup
-      - uses: DeterminateSystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39 # v13
+      - uses: cachix/install-nix-action@7ec16f2c061ab07b235a7245e06ed46fe9a1cab6 # v31.8.3
+        with:
+          extra_nix_config: |
+            sandbox = true
+            accept-flake-config = true
       # Don't use Swatinem/rust-cache for adjusting with Nix environment
       # https://github.com/actions/cache/blob/d4323d4df104b026a6aa633fdb11d772146be0bf/examples.md?plain=1#L610-L622
       - uses: actions/cache@v4
