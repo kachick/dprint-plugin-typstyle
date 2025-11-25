@@ -26,7 +26,7 @@ jobs:
     timeout-minutes: 15
     # Don't use `nix develop` in this steps to avoid other devshell tools and make faster to run
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Install dprint
         run: |
           # Don't use quotation for dprint-version, it will be broken for empty(latest) pattern.
