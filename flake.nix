@@ -48,7 +48,10 @@
               typst
               typstyle
               wasm-tools # How to use: https://github.com/NixOS/nixpkgs/pull/451399#pullrequestreview-3402766846
-              clippy # buildRustPackage does not enable `clippy-driver`
+
+              # buildRustPackage does not enable these
+              rust-analyzer
+              clippy
             ];
 
             nativeBuildInputs = with pkgs; [
