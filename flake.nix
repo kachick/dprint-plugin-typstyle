@@ -33,6 +33,9 @@
         in
         {
           default = pkgs.mkShell {
+            # How to use `inputsFrom`: https://github.com/NixOS/nixpkgs/issues/58624#issuecomment-1576860784
+            inputsFrom = [ self.packages.${system}.dprint-plugin-typstyle ];
+
             buildInputs = with pkgs; [
               bashInteractive
               findutils # xargs
@@ -41,19 +44,11 @@
               nixd
               go-task
               typos
-              yq-go
 
-              dprint
               typst
               typstyle
-              jsonschema-cli
-              gnugrep
               wasm-tools # How to use: https://github.com/NixOS/nixpkgs/pull/451399#pullrequestreview-3402766846
-              rustc
-              cargo
-              rustfmt
-              rust-analyzer
-              clippy
+              clippy # buildRustPackage does not enable `clippy-driver`
             ];
 
             nativeBuildInputs = with pkgs; [
