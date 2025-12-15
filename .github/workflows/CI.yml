@@ -43,7 +43,7 @@ jobs:
             accept-flake-config = true
       # Don't use Swatinem/rust-cache for adjusting with Nix environment
       # https://github.com/actions/cache/blob/d4323d4df104b026a6aa633fdb11d772146be0bf/examples.md?plain=1#L610-L622
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: |
             ~/.cargo/bin/
