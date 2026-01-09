@@ -16,7 +16,7 @@ tasks:
       SKIP_BUILD: 'false' # Don't use "$CI" for this purpose
     status:
       - |
-          [ "$SKIP_BUILD" == 'true' ]
+        [ "$SKIP_BUILD" == 'true' ]
     cmds:
       # Omit "--release" for development purpose. Release assets should use `nix build`
       - cargo build
