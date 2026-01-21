@@ -1,7 +1,6 @@
 #set text(
    font: "New Computer Modern",
 
-
    size: 10pt,
 )
 #set page(
@@ -13,7 +12,6 @@
 )
 #set par(
    justify: true,
-
 
    leading: 0.52em,
 )
