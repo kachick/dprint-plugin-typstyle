@@ -40,7 +40,8 @@
               bashInteractive
               findutils # xargs
               diffutils # for E2E test
-              nixfmt-rfc-style
+              nixfmt
+              nixfmt-tree
               nixd
               go-task
               typos
