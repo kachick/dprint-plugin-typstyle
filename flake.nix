@@ -1,12 +1,14 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    crane.url = "github:ipetkov/crane";
   };
 
   outputs =
     {
       self,
       nixpkgs,
+      crane,
     }:
     let
       lib = nixpkgs.lib;
@@ -19,9 +21,10 @@
         system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
+          craneLib = crane.mkLib pkgs;
         in
         rec {
-          dprint-plugin-typstyle = pkgs.callPackage ./package.nix { };
+          dprint-plugin-typstyle = pkgs.callPackage ./package.nix { inherit craneLib; };
           default = dprint-plugin-typstyle;
         }
       );
