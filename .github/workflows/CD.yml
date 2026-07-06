@@ -33,7 +33,7 @@ jobs:
           curl -fsSL https://dprint.dev/install.sh | sh -s ${{ matrix.dprint-version }} > /dev/null 2>&1
           echo "/home/runner/.dprint/bin" >> "$GITHUB_PATH"
       - name: Install Task
-        uses: arduino/setup-task@v2
+        uses: arduino/setup-task@v3
         with:
           version: '3.48.0' # selfup {"extract":"\\d\\.\\d+\\.\\d+","replacer":["task", "--version"]}
       - name: Download pre-built plugin
