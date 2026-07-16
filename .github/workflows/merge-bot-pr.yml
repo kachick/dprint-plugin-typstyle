@@ -10,7 +10,7 @@ permissions:
 jobs:
   judge-dependabot:
     timeout-minutes: 5
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     outputs:
       merge: ${{ steps.conclusion.outputs.merge }}
     if: ${{ github.actor == 'dependabot[bot]' }}
@@ -22,13 +22,14 @@ jobs:
         id: conclusion
         if: >-
           steps.dependabot.outputs.update-type != 'version-update:semver-major' ||
-          contains(steps.dependabot.outputs.dependency-names, 'cachix')
+          contains(steps.dependabot.outputs.dependency-names, 'NixOS') ||
+          contains(steps.dependabot.outputs.dependency-names, 'DeterminateSystems/magic-nix-cache-action')
         run: echo -n 'merge=true' | tee -a "$GITHUB_OUTPUT"
   dependabot:
     needs: [judge-dependabot]
     if: ${{ needs.judge-dependabot.outputs.merge == 'true' }}
     timeout-minutes: 30
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - name: Wait other jobs
         uses: kachick/wait-other-jobs@v4
@@ -50,7 +51,7 @@ jobs:
   #   Changing in all personal repository is annoy task for me. Even if using terrafform, getting mandatory CI names in each repo is too annoy!
   renovate:
     timeout-minutes: 30
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     if: ${{ github.actor == 'renovate[bot]' }}
     steps:
       - name: Wait other jobs
@@ -67,7 +68,7 @@ jobs:
   # https://github.com/kachick/anylang-template/issues/51
   selfup-runner:
     timeout-minutes: 30
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     if: ${{ github.actor == 'selfup-runner[bot]' }}
     steps:
       - name: Wait other jobs
