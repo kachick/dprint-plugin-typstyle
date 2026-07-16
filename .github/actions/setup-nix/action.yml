@@ -3,11 +3,7 @@ description: 'Install Nix and configure Nix store caching'
 runs:
   using: 'composite'
   steps:
-    - uses: cachix/install-nix-action@a49548c11d9846ad46ecc0115273879b045f001c # v31.10.7
-      with:
-        extra_nix_config: |
-          sandbox = true
-          accept-flake-config = true
+    - uses: NixOS/nix-installer-action@62c1943b776c509394b550f3f983adc14e9212d6 # v1.0.0
     - uses: nix-community/cache-nix-action@7df957e333c1e5da7721f60227dbba6d06080569 # v7.0.2
       with:
         primary-key: nix-${{ runner.os }}-${{ hashFiles('**/*.nix', '**/flake.lock') }}
