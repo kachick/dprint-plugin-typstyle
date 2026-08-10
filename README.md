@@ -53,7 +53,7 @@ Customize if necessary
 | indentWidth            | indentWidth          | tab_spaces              | tab-width                         |
 | blankLinesUpperBound   | `none`               | blank_lines_upper_bound | `none`                            |
 | reorderImportItems     | `none`               | reorder_import_items    | no-reorder-import-items # disable |
-| wrapText               | `none`               | wrap_mode (`false` => `none`, `true` => `fill`) | wrap-text (`none`/`fill`/`sentence`) |
+| wrapText               | `none`               | wrap_mode               | wrap-text (`none`/`fill`/`sentence`) |
 
 ## Versioning
 
