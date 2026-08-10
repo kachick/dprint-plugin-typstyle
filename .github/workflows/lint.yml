@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
-      - uses: crate-ci/typos@v1.48.0 # selfup {"extract":"\\d\\.\\d+\\.\\d+","replacer":["typos", "--version"], "nth": 2}
+      - uses: crate-ci/typos@v1.49.0 # selfup {"extract":"\\d\\.\\d+\\.\\d+","replacer":["typos", "--version"], "nth": 2}
         with:
           files: |
             .
