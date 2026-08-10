@@ -47,12 +47,12 @@ Customize if necessary
 
 ## Relationships of the option names
 
-| dprint-plugin-typstyle | dprint global config | typstyle-core           | typstyle CLI                      |
-| ---------------------- | -------------------- | ----------------------- | --------------------------------- |
-| lineWidth              | lineWidth            | max_width               | column                            |
-| indentWidth            | indentWidth          | tab_spaces              | tab-width                         |
-| blankLinesUpperBound   | `none`               | blank_lines_upper_bound | `none`                            |
-| reorderImportItems     | `none`               | reorder_import_items    | no-reorder-import-items # disable |
+| dprint-plugin-typstyle | dprint global config | typstyle-core           | typstyle CLI                         |
+| ---------------------- | -------------------- | ----------------------- | ------------------------------------ |
+| lineWidth              | lineWidth            | max_width               | column                               |
+| indentWidth            | indentWidth          | tab_spaces              | tab-width                            |
+| blankLinesUpperBound   | `none`               | blank_lines_upper_bound | `none`                               |
+| reorderImportItems     | `none`               | reorder_import_items    | no-reorder-import-items # disable    |
 | wrapText               | `none`               | wrap_mode               | wrap-text (`none`/`fill`/`sentence`) |
 
 ## Versioning
