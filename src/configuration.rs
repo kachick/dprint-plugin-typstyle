@@ -1,3 +1,4 @@
+use std::fmt;
 use std::str::FromStr;
 
 use schemars::{JsonSchema, schema_for};
@@ -12,18 +13,30 @@ pub enum WrapMode {
     Sentence,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ParseWrapModeError(String);
+
+impl fmt::Display for ParseWrapModeError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "Invalid wrapMode: '{}'. Expected 'none', 'fill', or 'sentence'.",
+            self.0
+        )
+    }
+}
+
+impl std::error::Error for ParseWrapModeError {}
+
 impl FromStr for WrapMode {
-    type Err = String;
+    type Err = ParseWrapModeError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "none" => Ok(WrapMode::None),
             "fill" => Ok(WrapMode::Fill),
             "sentence" => Ok(WrapMode::Sentence),
-            _ => Err(format!(
-                "Invalid wrapMode: '{}'. Expected 'none', 'fill', or 'sentence'.",
-                s
-            )),
+            _ => Err(ParseWrapModeError(s.to_string())),
         }
     }
 }
@@ -38,9 +51,8 @@ impl From<WrapMode> for typstyle_core::WrapMode {
     }
 }
 
-#[derive(Clone, Serialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, JsonSchema)]
 #[serde(rename_all = "camelCase")]
-#[derive(JsonSchema)]
 // Adjust names with dprint global configuration
 //
 // List of upstream:
@@ -67,6 +79,19 @@ pub struct Configuration {
     pub wrap_mode: WrapMode,
 }
 
+impl From<&Configuration> for typstyle_core::Config {
+    fn from(config: &Configuration) -> Self {
+        typstyle_core::Config {
+            tab_spaces: config.indent_width as usize,
+            max_width: config.line_width as usize,
+            blank_lines_upper_bound: config.blank_lines_upper_bound as usize,
+            reorder_import_items: config.reorder_import_items,
+            wrap_mode: config.wrap_mode.into(),
+            ..Default::default()
+        }
+    }
+}
+
 pub fn generate_json_schema() -> String {
     let schema = schema_for!(Configuration);
     serde_json::to_string_pretty(&schema).unwrap()
@@ -88,7 +113,11 @@ fn test_wrap_mode_from_str() {
     assert_eq!("none".parse::<WrapMode>(), Ok(WrapMode::None));
     assert_eq!("fill".parse::<WrapMode>(), Ok(WrapMode::Fill));
     assert_eq!("sentence".parse::<WrapMode>(), Ok(WrapMode::Sentence));
-    assert!("invalid".parse::<WrapMode>().is_err());
+    let err = "invalid".parse::<WrapMode>().unwrap_err();
+    assert_eq!(
+        err.to_string(),
+        "Invalid wrapMode: 'invalid'. Expected 'none', 'fill', or 'sentence'."
+    );
 
     assert_eq!(
         typstyle_core::WrapMode::from(WrapMode::None),
@@ -102,4 +131,21 @@ fn test_wrap_mode_from_str() {
         typstyle_core::WrapMode::from(WrapMode::Sentence),
         typstyle_core::WrapMode::Sentence
     );
+}
+
+#[test]
+fn test_typstyle_config_from_configuration() {
+    let config = Configuration {
+        line_width: 100,
+        indent_width: 4,
+        blank_lines_upper_bound: 3,
+        reorder_import_items: false,
+        wrap_mode: WrapMode::Sentence,
+    };
+    let typstyle_config = typstyle_core::Config::from(&config);
+    assert_eq!(typstyle_config.max_width, 100);
+    assert_eq!(typstyle_config.tab_spaces, 4);
+    assert_eq!(typstyle_config.blank_lines_upper_bound, 3);
+    assert!(!typstyle_config.reorder_import_items);
+    assert_eq!(typstyle_config.wrap_mode, typstyle_core::WrapMode::Sentence);
 }
