@@ -44,7 +44,7 @@ impl From<WrapMode> for typstyle_core::WrapMode {
 // Adjust names with dprint global configuration
 //
 // List of upstream:
-//   dprint: https://github.com/dprint/dprint/blob/0.57.4/crates/core/src/configuration.rs#L274-L295
+//   dprint: https://github.com/dprint/dprint/blob/0.57.4/crates/core/src/configuration.rs#L257-L289
 //   typstyle: https://github.com/typstyle-rs/typstyle/blob/v0.15.1/crates/typstyle-core/src/config.rs#L5-L18
 // TODO: Remove required from all options in json schema. See https://github.com/GREsau/schemars/issues/344
 //
