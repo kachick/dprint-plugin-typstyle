@@ -92,6 +92,7 @@ impl From<&Configuration> for typstyle_core::Config {
     }
 }
 
+#[must_use]
 pub fn generate_json_schema() -> String {
     let schema = schema_for!(Configuration);
     serde_json::to_string_pretty(&schema).unwrap()

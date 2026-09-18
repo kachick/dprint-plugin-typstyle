@@ -4,8 +4,14 @@ version = "0.5.0"
 authors = ["Kenichi Kamiya <kachick1@gmail.com>"]
 edition = "2024"
 license = "Apache-2.0"
+publish = false
+repository = "https://github.com/kachick/dprint-plugin-typstyle"
+description = "dprint plugin for Typst formatting using typstyle"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lints.clippy]
+uninlined_format_args = "warn"
 
 [dependencies]
 dprint-core = { version = "0.69.1", features = ["wasm"] }
