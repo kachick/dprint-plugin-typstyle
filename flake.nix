@@ -45,6 +45,7 @@
               nixd
               go-task
               typos
+              zizmor
 
               typst
               typstyle

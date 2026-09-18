@@ -30,6 +30,9 @@ on:
     - cron: '42 1 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   build:
     permissions:
@@ -39,7 +42,9 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
-      - uses: ./.github/actions/setup-nix
+        with:
+          persist-credentials: false
+      - uses: $/.github/actions/setup-nix
       # Don't use rust caches since using package.nix, rust cachees are only available in devshell workflow.
       - run: nix build
       - run: tree -h result/
@@ -60,7 +65,9 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
-      - uses: ./.github/actions/setup-nix
+        with:
+          persist-credentials: false
+      - uses: $/.github/actions/setup-nix
       # Don't use cache action, this task does not compile the dependencies. And it unexpectedly overrides cache result in build job
       - run: nix develop --command echo 'This step should be done before any other "nix develop" steps because of measuring Nix build time'
       - run: nix flake check
@@ -69,7 +76,11 @@ jobs:
 
   CD:
     needs: [build]
-    uses: ./.github/workflows/CD.yml
+    permissions:
+      # "contents: write" allows the action to create a release: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#permissions
+      contents: write
+      actions: read # For `gh run download`
+    uses: $/.github/workflows/CD.yml
     with:
       run_id: '${{ github.run_id }}'
       release: ${{ startsWith(github.ref, 'refs/tags/') }}
