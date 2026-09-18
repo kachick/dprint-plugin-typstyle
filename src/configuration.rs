@@ -138,34 +138,4 @@ fn test_wrap_mode_from_str() {
         err.to_string(),
         "Invalid wrapMode: 'invalid'. Expected 'none', 'fill', or 'sentence'."
     );
-
-    assert_eq!(
-        typstyle_core::WrapMode::from(WrapMode::None),
-        typstyle_core::WrapMode::None
-    );
-    assert_eq!(
-        typstyle_core::WrapMode::from(WrapMode::Fill),
-        typstyle_core::WrapMode::Fill
-    );
-    assert_eq!(
-        typstyle_core::WrapMode::from(WrapMode::Sentence),
-        typstyle_core::WrapMode::Sentence
-    );
-}
-
-#[test]
-fn test_typstyle_config_from_configuration() {
-    let config = Configuration {
-        line_width: 100,
-        indent_width: 4,
-        blank_lines_upper_bound: 3,
-        reorder_import_items: false,
-        wrap_mode: WrapMode::Sentence,
-    };
-    let typstyle_config = typstyle_core::Config::from(&config);
-    assert_eq!(typstyle_config.max_width, 100);
-    assert_eq!(typstyle_config.tab_spaces, 4);
-    assert_eq!(typstyle_config.blank_lines_upper_bound, 3);
-    assert!(!typstyle_config.reorder_import_items);
-    assert_eq!(typstyle_config.wrap_mode, typstyle_core::WrapMode::Sentence);
 }

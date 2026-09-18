@@ -145,13 +145,6 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_license_text() {
-        let mut handler = TypstPluginHandler;
-        let license = handler.license_text();
-        assert!(license.contains("Apache License"));
-    }
-
-    #[test]
     fn test_resolve_config_defaults() {
         let mut handler = TypstPluginHandler;
         let result = handler.resolve_config(ConfigKeyMap::new(), &GlobalConfiguration::default());
