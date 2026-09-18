@@ -78,7 +78,7 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
         let wrap_text = get_value(
             &mut config,
             "wrapText",
-            typestyle_defaults.wrap_text,
+            typestyle_defaults.wrap_mode != typstyle_core::WrapMode::None,
             &mut diagnostics,
         );
 
@@ -115,7 +115,11 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
             max_width: request.config.line_width as usize,
             blank_lines_upper_bound: request.config.blank_lines_upper_bound as usize,
             reorder_import_items: request.config.reorder_import_items,
-            wrap_text: request.config.wrap_text,
+            wrap_mode: if request.config.wrap_text {
+                typstyle_core::WrapMode::Fill
+            } else {
+                typstyle_core::WrapMode::None
+            },
             collapse_markup_spaces: typestyle_defaults.collapse_markup_spaces,
         };
         let formatter = typstyle_core::Typstyle::new(config);

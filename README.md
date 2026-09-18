@@ -43,17 +43,17 @@ Customize if necessary
 
 1. typst section in dprint.json
 1. [global config in dprint.json](https://dprint.dev/config/#global-configuration)
-1. [default values in typstyle-core](https://github.com/typstyle-rs/typstyle/blob/v0.13.5/crates/typstyle-core/src/config.rs#L18-L28)
+1. [default values in typstyle-core](https://github.com/typstyle-rs/typstyle/blob/v0.15.1/crates/typstyle-core/src/config.rs#L36-L43)
 
 ## Relationships of the option names
 
-| dprint-plugin-typstyle | dprint global config | typstyle-core           | typstyle CLI                      |
-| ---------------------- | -------------------- | ----------------------- | --------------------------------- |
-| lineWidth              | lineWidth            | max_width               | column                            |
-| indentWidth            | indentWidth          | tab_spaces              | tab-width                         |
-| blankLinesUpperBound   | `none`               | blank_lines_upper_bound | `none`                            |
-| reorderImportItems     | `none`               | reorder_import_items    | no-reorder-import-items # disable |
-| wrapText               | `none`               | wrap_text               | wrap-text                         |
+| dprint-plugin-typstyle | dprint global config | typstyle-core           | typstyle CLI                         |
+| ---------------------- | -------------------- | ----------------------- | ------------------------------------ |
+| lineWidth              | lineWidth            | max_width               | column                               |
+| indentWidth            | indentWidth          | tab_spaces              | tab-width                            |
+| blankLinesUpperBound   | `none`               | blank_lines_upper_bound | `none`                               |
+| reorderImportItems     | `none`               | reorder_import_items    | no-reorder-import-items # disable    |
+| wrapText               | `none`               | wrap_mode               | wrap-text (`none`/`fill`/`sentence`) |
 
 ## Versioning
 
