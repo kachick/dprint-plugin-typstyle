@@ -1,13 +1,11 @@
 use dprint_core::configuration::{ConfigKeyMap, GlobalConfiguration, get_value};
 use dprint_core::plugins::{
-    FileMatchingInfo, FormatResult, PluginInfo, PluginResolveConfigurationResult,
+    FileMatchingInfo, FormatError, FormatResult, PluginInfo, PluginResolveConfigurationResult,
     SyncFormatRequest, SyncHostFormatRequest, SyncPluginHandler,
 };
 
-use anyhow::Result;
-
 pub mod configuration;
-use configuration::Configuration;
+use configuration::{Configuration, WrapMode};
 
 #[derive(Default)]
 pub struct TypstPluginHandler;
@@ -75,10 +73,10 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
             &mut diagnostics,
         );
 
-        let wrap_text = get_value(
+        let wrap_mode = get_value(
             &mut config,
-            "wrapText",
-            typestyle_defaults.wrap_mode != typstyle_core::WrapMode::None,
+            "wrapMode",
+            WrapMode::default(),
             &mut diagnostics,
         );
 
@@ -88,7 +86,7 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
                 indent_width,
                 blank_lines_upper_bound,
                 reorder_import_items,
-                wrap_text,
+                wrap_mode,
             },
             diagnostics,
             file_matching: FileMatchingInfo {
@@ -115,11 +113,7 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
             max_width: request.config.line_width as usize,
             blank_lines_upper_bound: request.config.blank_lines_upper_bound as usize,
             reorder_import_items: request.config.reorder_import_items,
-            wrap_mode: if request.config.wrap_text {
-                typstyle_core::WrapMode::Fill
-            } else {
-                typstyle_core::WrapMode::None
-            },
+            wrap_mode: request.config.wrap_mode.into(),
             collapse_markup_spaces: typestyle_defaults.collapse_markup_spaces,
         };
         let formatter = typstyle_core::Typstyle::new(config);
@@ -127,14 +121,14 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
         match formatter.format_text(text.as_ref()).render() {
             Ok(result) if result != text => Ok(Some(result.into())),
             Ok(_) => Ok(None),
-            Err(err) => Err(anyhow::anyhow!("Formatting failed: {}", err)),
+            Err(err) => Err(FormatError::new(err)),
         }
     }
 
     fn check_config_updates(
         &self,
         _message: dprint_core::plugins::CheckConfigUpdatesMessage,
-    ) -> Result<Vec<dprint_core::plugins::ConfigChange>> {
+    ) -> Result<Vec<dprint_core::plugins::ConfigChange>, FormatError> {
         Ok(Vec::new())
     }
 }
@@ -143,4 +137,4 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
 use dprint_core::generate_plugin_code;
 
 #[cfg(target_arch = "wasm32")]
-generate_plugin_code!(TypstPluginHandler, TypstPluginHandler, Configuration);
+generate_plugin_code!(TypstPluginHandler, TypstPluginHandler);
