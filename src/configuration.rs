@@ -94,7 +94,22 @@ impl From<&Configuration> for typstyle_core::Config {
 
 #[must_use]
 pub fn generate_json_schema() -> String {
-    let schema = schema_for!(Configuration);
+    let mut schema = serde_json::to_value(schema_for!(Configuration)).unwrap();
+    let version = env!("CARGO_PKG_VERSION");
+    if let Some(obj) = schema.as_object_mut() {
+        obj.remove("title");
+        obj.remove("required");
+        obj.insert(
+            "$id".to_string(),
+            serde_json::Value::String(format!(
+                "https://plugins.dprint.dev/kachick/typstyle/{version}/schema.json"
+            )),
+        );
+        obj.insert(
+            "additionalProperties".to_string(),
+            serde_json::Value::Bool(false),
+        );
+    }
     serde_json::to_string_pretty(&schema).unwrap()
 }
 
@@ -107,6 +122,10 @@ fn test_generate_json_schema() {
     assert!(schema.contains(r#""reorderImportItems":"#));
     assert!(schema.contains(r#""wrapMode":"#));
     assert!(schema.contains(r#""sentence""#));
+    assert!(schema.contains(r#""$id": "https://plugins.dprint.dev/kachick/typstyle/"#));
+    assert!(schema.contains(r#""additionalProperties": false"#));
+    assert!(!schema.contains(r#""title":"#));
+    assert!(!schema.contains(r#""required":"#));
 }
 
 #[test]

@@ -33,7 +33,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     rustc.llvmPackages.bintools # rust-lld
-    yq-go
   ];
 
   buildPhase = ''
