@@ -3,7 +3,7 @@ updates:
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
-      interval: 'weekly'
+      interval: 'monthly'
     ignore:
       - dependency-name: 'crate-ci/typos'
     cooldown:
@@ -13,7 +13,7 @@ updates:
     schedule:
       interval: weekly
     cooldown:
-      default-days: 7
+      default-days: 5
     # Don't specify version-strategy if https://github.com/dependabot/dependabot-core/issues/4009 was unstable state
     # At least 2026-09-18, "increase" option raised an error even after closed the issue :<
     # versioning-strategy: increase
