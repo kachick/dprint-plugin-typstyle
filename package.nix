@@ -33,16 +33,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     rustc.llvmPackages.bintools # rust-lld
-    yq-go
   ];
 
-  buildPhase = ''
-    runHook preBuild
+  cargoBuildFlags = [
+    "--target=${wasmTarget}"
+    "--package=dprint-plugin-typstyle"
+  ];
 
-    bash "$src/scripts/normalize_json_schema.bash" > schema.json
-    cargo build --release --target=${wasmTarget}
-
-    runHook postBuild
+  postBuild = ''
+    cargo run --package=generate_json_schema > schema.json
   '';
 
   installPhase = ''
