@@ -11,6 +11,10 @@ on:
         type: boolean
         default: false
 
+permissions:
+  contents: read
+  actions: read # For `gh run download`
+
 jobs:
   check:
     strategy:
@@ -58,6 +62,10 @@ jobs:
     runs-on: ubuntu-26.04
     timeout-minutes: 15
     needs: [check]
+    permissions:
+      # "contents: write" allows the action to create a release: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#permissions
+      contents: write
+      actions: read # For `gh run download`
     env:
       GH_TOKEN: ${{ github.token }}
     steps:

@@ -30,6 +30,9 @@ on:
     - cron: '42 1 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   build:
     permissions:
@@ -69,6 +72,10 @@ jobs:
 
   CD:
     needs: [build]
+    permissions:
+      # "contents: write" allows the action to create a release: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#permissions
+      contents: write
+      actions: read # For `gh run download`
     uses: $/.github/workflows/CD.yml
     with:
       run_id: '${{ github.run_id }}'
