@@ -58,4 +58,12 @@ jobs:
             target/
           key: ${{ runner.os }}-flake-${{ hashFiles('flake.lock') }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-flake-${{ hashFiles('flake.lock') }}-
-      - run: nix develop --command task
+      - name: Install direnv
+        run: |
+          url="$(nix eval --raw --impure --expr '(builtins.fromJSON (builtins.readFile ./flake.lock)).nodes.nixpkgs.locked.url')"
+          nix profile add "${url}#direnv"
+      - name: Apply direnv
+        run: |
+          direnv allow .
+          direnv export gha > "$GITHUB_ENV"
+      - run: task
