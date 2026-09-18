@@ -13,10 +13,12 @@ on:
 
 permissions:
   contents: read
-  actions: read # For `gh run download`
 
 jobs:
   check:
+    permissions:
+      contents: read
+      actions: read # For `gh run download`
     strategy:
       fail-fast: false
       # Syntax https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs
