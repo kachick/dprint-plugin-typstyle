@@ -26,6 +26,8 @@ typstyle-core = { version = "0.15.1", default-features = false }
 
 [lib]
 crate-type = ["lib", "cdylib"]
+# Distributed only as a dprint WASM plugin with no public Rust API
+doctest = false
 
 [workspace]
 resolver = "2"
