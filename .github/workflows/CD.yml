@@ -43,8 +43,9 @@ jobs:
       - name: Download pre-built plugin
         env:
           GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ inputs.run_id }}
         run: |
-          gh run download '${{ inputs.run_id }}'
+          gh run download "$RUN_ID"
           tree dist
       - name: Make sure dependencies
         run: |
@@ -69,8 +70,10 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-      - run: |
-          gh run download '${{ inputs.run_id }}' --repo '${{ github.repository }}'
+      - env:
+          RUN_ID: ${{ inputs.run_id }}
+        run: |
+          gh run download "$RUN_ID" --repo '${{ github.repository }}'
           tree dist
       - run: |
           gh release create --repo '${{ github.repository }}' --verify-tag "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" dist/lib/plugin.wasm dist/share/schema.json
