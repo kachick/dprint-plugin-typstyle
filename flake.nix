@@ -61,8 +61,6 @@
             ];
 
             env = {
-              CARGO_BUILD_TARGET = "wasm32-unknown-unknown";
-
               # Needed for avoiding "error: linker `rust-lld` not found".
               # Adding packages like binutils is not enough
               #
