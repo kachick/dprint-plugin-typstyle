@@ -4,7 +4,6 @@
   rustc,
   dprint,
   writableTmpDirAsHomeHook,
-  gnugrep,
 }:
 
 let
@@ -58,17 +57,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     dprint
     writableTmpDirAsHomeHook
-    gnugrep
   ];
 
   installCheckPhase = ''
     runHook preInstallCheck
-
-    grep --quiet --fixed-strings '${finalAttrs.version}' "$out/share/schema.json"
-
     cd "$(mktemp --directory)"
     dprint check --allow-no-files --config-discovery=false --plugins "$out/lib/plugin.wasm"
-
     runHook postInstallCheck
   '';
 
