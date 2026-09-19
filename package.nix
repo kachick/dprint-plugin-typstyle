@@ -25,33 +25,22 @@ let
     inherit src;
     strictDeps = true;
 
+    cargoExtraArgs = "--target ${wasmTarget} --package dprint-plugin-typstyle --package schemagen";
+
     nativeBuildInputs = [
       rustc.llvmPackages.bintools # rust-lld
     ];
-
-    # Needed for avoiding "error: linker `rust-lld` not found".
-    # Adding packages like binutils is not enough
-    #
-    # https://github.com/NixOS/nixpkgs/issues/70238
-    CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER = "lld";
   };
 
-  cargoArtifacts = craneLib.buildDepsOnly (
-    commonArgs
-    // {
-      cargoExtraArgs = "--target ${wasmTarget} --package dprint-plugin-typstyle --package schemagen";
-    }
-  );
+  cargoArtifacts = craneLib.buildDepsOnly commonArgs;
 in
 craneLib.buildPackage (
   commonArgs
-  // rec {
+  // {
     inherit cargoArtifacts;
 
     pname = "dprint-plugin-typstyle";
     version = with builtins; (fromTOML (readFile ./Cargo.toml)).package.version;
-
-    cargoExtraArgs = "--target ${wasmTarget} --package dprint-plugin-typstyle --package schemagen";
 
     # Wasm targets cannot run standard cargo test without a runner
     doCheck = false;
