@@ -22,8 +22,7 @@ jobs:
         id: conclusion
         if: >-
           steps.dependabot.outputs.update-type != 'version-update:semver-major' ||
-          contains(steps.dependabot.outputs.dependency-names, 'NixOS') ||
-          contains(steps.dependabot.outputs.dependency-names, 'DeterminateSystems/magic-nix-cache-action')
+          contains(steps.dependabot.outputs.dependency-names, 'NixOS')
         run: echo -n 'merge=true' | tee -a "$GITHUB_OUTPUT"
   dependabot:
     needs: [judge-dependabot]
