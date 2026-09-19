@@ -66,7 +66,7 @@ tasks:
     cmds:
       - cargo fmt
       - dprint fmt
-      - git ls-files '*.nix' | xargs nix fmt
+      - treefmt
   lint:
     cmds:
       - cargo clippy
