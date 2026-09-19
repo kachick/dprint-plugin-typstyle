@@ -16,6 +16,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dprint-plugin-typstyle";
   version = with builtins; (fromTOML (readFile ./Cargo.toml)).package.version;
 
+  __structuredAttrs = true;
+
   src = lib.fileset.toSource {
     root = ./.;
     fileset = lib.fileset.unions [
@@ -36,8 +38,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   cargoBuildFlags = [
-    "--target=${wasmTarget}"
-    "--package=dprint-plugin-typstyle"
+    "--target"
+    wasmTarget
+    "--package"
+    "dprint-plugin-typstyle"
   ];
 
   postBuild = ''
