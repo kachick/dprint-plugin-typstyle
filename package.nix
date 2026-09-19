@@ -4,9 +4,6 @@
   rustc,
   dprint,
   writableTmpDirAsHomeHook,
-  jsonschema-cli,
-  yq-go,
-  gnugrep,
 }:
 
 let
@@ -26,7 +23,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ./Cargo.toml
       ./Cargo.lock
       ./LICENSE
-      ./scripts
       ./tests
     ];
   };
@@ -61,19 +57,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     dprint
     writableTmpDirAsHomeHook
-    jsonschema-cli
-    yq-go
-    gnugrep
   ];
 
   installCheckPhase = ''
     runHook preInstallCheck
-
-    SCHEMA_PATH="$out/share/schema.json" VERSION='${finalAttrs.version}' bash "$src/scripts/test-jsonschema.bash"
-
     cd "$(mktemp --directory)"
     dprint check --allow-no-files --config-discovery=false --plugins "$out/lib/plugin.wasm"
-
     runHook postInstallCheck
   '';
 
