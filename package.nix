@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     root = ./.;
     fileset = lib.fileset.unions [
       ./src
-      ./generate_json_schema
+      ./crates/schemagen
       ./Cargo.toml
       ./Cargo.lock
       ./LICENSE
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package"
     "dprint-plugin-typstyle"
     "--package"
-    "generate_json_schema"
+    "schemagen"
   ];
 
   installPhase = ''
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     mkdir -p "$out/lib" "$out/share"
     cp target/${wasmTarget}/release/dprint_plugin_typstyle.wasm "$out/lib/plugin.wasm"
-    cp target/${wasmTarget}/release/build/generate_json_schema-*/out/schema.json "$out/share/schema.json"
+    cp target/${wasmTarget}/release/build/schemagen-*/out/schema.json "$out/share/schema.json"
 
     runHook postInstall
   '';

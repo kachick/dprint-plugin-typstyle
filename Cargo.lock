@@ -245,13 +245,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "generate_json_schema"
-version = "0.1.0"
-dependencies = [
- "dprint-plugin-typstyle",
-]
-
-[[package]]
 name = "getrandom"
 version = "0.3.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -786,6 +779,13 @@ name = "rustversion"
 version = "1.0.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cf54715a573b99ac80df0bc206da022bcd442c974952c7b9720069370852e21f"
+
+[[package]]
+name = "schemagen"
+version = "0.1.0"
+dependencies = [
+ "dprint-plugin-typstyle",
+]
 
 [[package]]
 name = "schemars"
