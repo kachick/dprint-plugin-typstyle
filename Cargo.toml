@@ -32,3 +32,6 @@ doctest = false
 [workspace]
 resolver = "2"
 members = ["generate_json_schema"]
+
+[dev-dependencies]
+jsonschema = { version = "0.56.0", default-features = false }
