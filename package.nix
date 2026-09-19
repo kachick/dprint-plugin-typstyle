@@ -16,6 +16,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dprint-plugin-typstyle";
   version = with builtins; (fromTOML (readFile ./Cargo.toml)).package.version;
 
+  __structuredAttrs = true;
+
   src = lib.fileset.toSource {
     root = ./.;
     fileset = lib.fileset.unions [
@@ -36,20 +38,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   cargoBuildFlags = [
-    "--target=${wasmTarget}"
-    "--package=dprint-plugin-typstyle"
+    "--target"
+    wasmTarget
+    "--package"
+    "dprint-plugin-typstyle"
+    "--package"
+    "generate_json_schema"
   ];
-
-  postBuild = ''
-    cargo run --package=generate_json_schema > schema.json
-  '';
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p "$out/lib" "$out/share"
     cp target/${wasmTarget}/release/dprint_plugin_typstyle.wasm "$out/lib/plugin.wasm"
-    cp schema.json $out/share/
+    cp target/${wasmTarget}/release/build/generate_json_schema-*/out/schema.json "$out/share/schema.json"
 
     runHook postInstall
   '';
