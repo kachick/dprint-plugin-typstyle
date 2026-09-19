@@ -6,3 +6,6 @@ publish = false
 
 [dependencies]
 dprint-plugin-typstyle = { path = ".." }
+
+[build-dependencies]
+dprint-plugin-typstyle = { path = ".." }
