@@ -36,7 +36,7 @@ tasks:
       - |
         [ "$SKIP_BUILD" == 'true' ]
     cmds:
-      - cargo test
+      - cargo test --workspace
   test-e2e:
     deps:
       - test-e2e-default
