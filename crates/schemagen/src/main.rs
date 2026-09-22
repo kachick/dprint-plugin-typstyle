@@ -1,15 +1,12 @@
 fn main() {
-    println!(
-        "{}",
-        dprint_plugin_typstyle::configuration::generate_json_schema()
-    );
+    print!("{}", include_str!(concat!(env!("OUT_DIR"), "/schema.json")));
 }
 
 #[cfg(test)]
 mod tests {
     #[test]
     fn test_generate_json_schema() {
-        let schema = dprint_plugin_typstyle::configuration::generate_json_schema();
+        let schema = include_str!(concat!(env!("OUT_DIR"), "/schema.json"));
         assert!(schema.contains(r#""lineWidth":"#));
         assert!(schema.contains(r#""indentWidth":"#));
         assert!(schema.contains(r#""blankLinesUpperBound":"#));
