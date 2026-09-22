@@ -34,4 +34,4 @@ resolver = "2"
 members = ["crates/schemagen"]
 
 [dev-dependencies]
-jsonschema = { version = "0.56.0", default-features = false }
+jsonschema = { version = "0.57.0", default-features = false }
