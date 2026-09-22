@@ -10,9 +10,6 @@ description = "dprint plugin for Typst formatting using typstyle"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[lints.clippy]
-uninlined_format_args = "warn"
-
 [features]
 schema = ["dep:schemars"]
 

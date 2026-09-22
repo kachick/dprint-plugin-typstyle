@@ -69,7 +69,7 @@ tasks:
       - treefmt
   lint:
     cmds:
-      - cargo clippy
+      - cargo clippy -- --deny warnings
       - cargo fmt --check
       - dprint check
       - typos . .github .vscode
