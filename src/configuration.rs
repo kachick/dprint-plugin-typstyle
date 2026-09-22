@@ -1,10 +1,12 @@
 use std::fmt;
 use std::str::FromStr;
 
+#[cfg(feature = "schema")]
 use schemars::{JsonSchema, schema_for};
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize, JsonSchema, Default)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize, Default)]
+#[cfg_attr(feature = "schema", derive(JsonSchema))]
 #[serde(rename_all = "kebab-case")]
 pub enum WrapMode {
     #[default]
@@ -51,7 +53,8 @@ impl From<WrapMode> for typstyle_core::WrapMode {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, Serialize, JsonSchema)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
+#[cfg_attr(feature = "schema", derive(JsonSchema))]
 #[serde(rename_all = "camelCase")]
 // Adjust names with dprint global configuration
 //
@@ -92,6 +95,7 @@ impl From<&Configuration> for typstyle_core::Config {
     }
 }
 
+#[cfg(feature = "schema")]
 #[must_use]
 pub fn generate_json_schema() -> String {
     let mut schema = serde_json::to_value(schema_for!(Configuration)).unwrap();
@@ -111,39 +115,6 @@ pub fn generate_json_schema() -> String {
         );
     }
     serde_json::to_string_pretty(&schema).unwrap()
-}
-
-#[test]
-fn test_generate_json_schema() {
-    let schema = generate_json_schema();
-    assert!(schema.contains(r#""lineWidth":"#));
-    assert!(schema.contains(r#""indentWidth":"#));
-    assert!(schema.contains(r#""blankLinesUpperBound":"#));
-    assert!(schema.contains(r#""reorderImportItems":"#));
-    assert!(schema.contains(r#""wrapMode":"#));
-    assert!(schema.contains(r#""sentence""#));
-    assert!(schema.contains(&format!(
-        "https://plugins.dprint.dev/kachick/typstyle/{}/schema.json",
-        env!("CARGO_PKG_VERSION")
-    )));
-    assert!(schema.contains(r#""additionalProperties": false"#));
-    assert!(!schema.contains(r#""title":"#));
-    assert!(!schema.contains(r#""required":"#));
-
-    let schema_value: serde_json::Value = serde_json::from_str(&schema).unwrap();
-    let validator = jsonschema::validator_for(&schema_value).expect("valid JSON Schema");
-
-    let fixture: serde_json::Value =
-        serde_json::from_str(include_str!("../tests/all/dprint.json")).unwrap();
-    assert!(validator.is_valid(&fixture["typst"]));
-
-    for mode in ["none", "fill", "sentence"] {
-        let valid = serde_json::json!({ "wrapMode": mode });
-        assert!(validator.is_valid(&valid));
-    }
-
-    let invalid = serde_json::json!({ "wrapMode": "unknown" });
-    assert!(!validator.is_valid(&invalid));
 }
 
 #[test]

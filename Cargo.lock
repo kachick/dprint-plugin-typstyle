@@ -157,7 +157,6 @@ name = "dprint-plugin-typstyle"
 version = "0.5.0"
 dependencies = [
  "dprint-core",
- "jsonschema",
  "schemars",
  "serde",
  "serde_json",
@@ -785,6 +784,8 @@ name = "schemagen"
 version = "0.1.0"
 dependencies = [
  "dprint-plugin-typstyle",
+ "jsonschema",
+ "serde_json",
 ]
 
 [[package]]
