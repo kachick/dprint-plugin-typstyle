@@ -6,9 +6,6 @@
     "editor.formatOnSave": true,
     "editor.inlayHints.enabled": "onUnlessPressed"
   },
-  "[nix]": {
-    "editor.defaultFormatter": "jnoortheen.nix-ide"
-  },
   "nix.enableLanguageServer": true,
   "nix.serverPath": "nixd"
 }

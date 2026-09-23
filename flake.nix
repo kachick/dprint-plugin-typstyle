@@ -13,8 +13,21 @@
       forAllSystems = lib.genAttrs lib.systems.flakeExposed;
     in
     {
-      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-tree);
-
+      formatter = forAllSystems (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        pkgs.writeShellApplication {
+          name = "dprint-fmt";
+          runtimeInputs = with pkgs; [
+            dprint
+          ];
+          text = ''
+            dprint fmt "$@"
+          '';
+        }
+      );
       packages = forAllSystems (
         system:
         let
@@ -40,8 +53,6 @@
               bashInteractive
               findutils # xargs
               diffutils # for E2E test
-              nixfmt
-              nixfmt-tree
               nixd
               go-task
               typos
