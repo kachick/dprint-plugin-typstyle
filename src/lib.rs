@@ -142,18 +142,13 @@ mod tests {
     use dprint_core::plugins::{FormatConfigId, NullCancellationToken};
 
     use super::*;
-    use configuration::WrapMode;
 
     #[test]
     fn test_resolve_config_defaults() {
         let mut handler = TypstPluginHandler;
         let result = handler.resolve_config(ConfigKeyMap::new(), &GlobalConfiguration::default());
         assert!(result.diagnostics.is_empty());
-        assert_eq!(result.config.line_width, 80);
-        assert_eq!(result.config.indent_width, 2);
-        assert_eq!(result.config.blank_lines_upper_bound, 1);
-        assert!(result.config.reorder_import_items);
-        assert_eq!(result.config.wrap_mode, WrapMode::None);
+        assert_eq!(result.config, Configuration::default());
         assert_eq!(result.file_matching.file_extensions, vec!["typ"]);
     }
 

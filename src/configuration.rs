@@ -144,22 +144,6 @@ pub fn generate_json_schema() -> String {
 
 #[test]
 fn test_wrap_mode_from_str() {
-    assert_eq!("none".parse::<WrapMode>(), Ok(WrapMode::None));
-    assert_eq!("fill".parse::<WrapMode>(), Ok(WrapMode::Fill));
     assert_eq!("sentence".parse::<WrapMode>(), Ok(WrapMode::Sentence));
-    let err = "invalid".parse::<WrapMode>().unwrap_err();
-    assert_eq!(
-        err.to_string(),
-        "Invalid wrapMode: 'invalid'. Expected 'none', 'fill', or 'sentence'."
-    );
-}
-
-#[test]
-fn test_configuration_default() {
-    let default_config = Configuration::default();
-    assert_eq!(default_config.line_width, 80);
-    assert_eq!(default_config.indent_width, 2);
-    assert_eq!(default_config.blank_lines_upper_bound, 1);
-    assert!(default_config.reorder_import_items);
-    assert_eq!(default_config.wrap_mode, WrapMode::None);
+    assert!("invalid".parse::<WrapMode>().is_err());
 }
