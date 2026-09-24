@@ -63,7 +63,8 @@ impl From<WrapMode> for typstyle_core::WrapMode {
 //   typstyle: https://github.com/typstyle-rs/typstyle/blob/v0.15.1/crates/typstyle-core/src/config.rs#L5-L18
 // TODO: Remove required from all options in json schema. See https://github.com/GREsau/schemars/issues/344
 //
-// Don't add "collapse_markup_spaces" to config schema until upstream open it in the CLI
+// Don't add "collapse_markup_spaces" to config schema until upstream open it in the CLI.
+// At least as of typstyle 0.15.1, it is still not open in the CLI.
 // See https://github.com/typstyle-rs/typstyle/pull/302#discussion_r2104164153 for detail
 pub struct Configuration {
     // column/max_width in typstyle-core
