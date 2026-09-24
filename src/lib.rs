@@ -106,10 +106,7 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
             return Ok(None);
         }
 
-        let text = match std::str::from_utf8(&request.file_bytes) {
-            Ok(text) => text,
-            Err(err) => return Err(FormatError::new(err.to_string())),
-        };
+        let text = std::str::from_utf8(&request.file_bytes)?;
 
         let config = typstyle_core::Config::from(request.config);
         let formatter = typstyle_core::Typstyle::new(config);
