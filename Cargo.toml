@@ -31,3 +31,16 @@ doctest = false
 [workspace]
 resolver = "2"
 members = ["crates/schemagen"]
+
+# Optimization matching official dprint plugins.
+# Do not use `wasm-opt`:
+# 1. Official dprint plugins do not use wasm-opt in their build pipelines.
+# 2. Historically, wasm-opt caused crashes (https://github.com/dprint/dprint/issues/79).
+# 3. rustc release profile with LTO is enough for wasmtime execution.
+[profile.release]
+opt-level = 3
+debug = false
+lto = true
+debug-assertions = false
+overflow-checks = false
+panic = "abort"
