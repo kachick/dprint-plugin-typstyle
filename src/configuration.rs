@@ -82,6 +82,19 @@ pub struct Configuration {
     pub wrap_mode: WrapMode,
 }
 
+impl Default for Configuration {
+    fn default() -> Self {
+        let typstyle_defaults = typstyle_core::Config::new();
+        Self {
+            line_width: typstyle_defaults.max_width as u32,
+            indent_width: typstyle_defaults.tab_spaces as u8,
+            blank_lines_upper_bound: typstyle_defaults.blank_lines_upper_bound as u32,
+            reorder_import_items: typstyle_defaults.reorder_import_items,
+            wrap_mode: WrapMode::default(),
+        }
+    }
+}
+
 impl From<&Configuration> for typstyle_core::Config {
     fn from(config: &Configuration) -> Self {
         typstyle_core::Config {
@@ -113,6 +126,18 @@ pub fn generate_json_schema() -> String {
             "additionalProperties".to_string(),
             serde_json::Value::Bool(false),
         );
+
+        if let Some(properties) = obj.get_mut("properties").and_then(|p| p.as_object_mut()) {
+            if let Ok(serde_json::Value::Object(defaults)) =
+                serde_json::to_value(Configuration::default())
+            {
+                for (key, default_val) in defaults {
+                    if let Some(prop) = properties.get_mut(&key).and_then(|p| p.as_object_mut()) {
+                        prop.insert("default".to_string(), default_val);
+                    }
+                }
+            }
+        }
     }
     serde_json::to_string_pretty(&schema).unwrap()
 }
@@ -127,4 +152,14 @@ fn test_wrap_mode_from_str() {
         err.to_string(),
         "Invalid wrapMode: 'invalid'. Expected 'none', 'fill', or 'sentence'."
     );
+}
+
+#[test]
+fn test_configuration_default() {
+    let default_config = Configuration::default();
+    assert_eq!(default_config.line_width, 80);
+    assert_eq!(default_config.indent_width, 2);
+    assert_eq!(default_config.blank_lines_upper_bound, 1);
+    assert!(default_config.reorder_import_items);
+    assert_eq!(default_config.wrap_mode, WrapMode::None);
 }

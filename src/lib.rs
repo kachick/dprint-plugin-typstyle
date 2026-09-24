@@ -7,7 +7,7 @@ use dprint_core::plugins::{
 };
 
 pub mod configuration;
-use configuration::{Configuration, WrapMode};
+use configuration::Configuration;
 
 #[derive(Default)]
 pub struct TypstPluginHandler;
@@ -38,14 +38,14 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
     ) -> PluginResolveConfigurationResult<Configuration> {
         let mut config = config;
         let mut diagnostics = Vec::new();
-        let typestyle_defaults = typstyle_core::Config::new();
+        let default_config = Configuration::default();
 
         let line_width = get_value(
             &mut config,
             "lineWidth",
             global_config
                 .line_width
-                .unwrap_or(typestyle_defaults.max_width as u32),
+                .unwrap_or(default_config.line_width),
             &mut diagnostics,
         );
 
@@ -54,28 +54,28 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
             "indentWidth",
             global_config
                 .indent_width
-                .unwrap_or(typestyle_defaults.tab_spaces as u8),
+                .unwrap_or(default_config.indent_width),
             &mut diagnostics,
         );
 
         let blank_lines_upper_bound = get_value(
             &mut config,
             "blankLinesUpperBound",
-            typestyle_defaults.blank_lines_upper_bound as u32,
+            default_config.blank_lines_upper_bound,
             &mut diagnostics,
         );
 
         let reorder_import_items = get_value(
             &mut config,
             "reorderImportItems",
-            typestyle_defaults.reorder_import_items,
+            default_config.reorder_import_items,
             &mut diagnostics,
         );
 
         let wrap_mode = get_value(
             &mut config,
             "wrapMode",
-            WrapMode::default(),
+            default_config.wrap_mode,
             &mut diagnostics,
         );
 
@@ -142,6 +142,7 @@ mod tests {
     use dprint_core::plugins::{FormatConfigId, NullCancellationToken};
 
     use super::*;
+    use configuration::WrapMode;
 
     #[test]
     fn test_resolve_config_defaults() {
