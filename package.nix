@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ./Cargo.toml
       ./Cargo.lock
       ./LICENSE
-      ./tests
     ];
   };
 
