@@ -82,6 +82,8 @@ tasks:
     cmds:
       - cargo run --package sync-pkg-json -- {{.CLI_ARGS}}
       - cargo check --workspace
+      - git add Cargo.toml npm/package.json Cargo.lock
+      - git commit -m "Bump version to {{.CLI_ARGS}}"
   schema:
     cmds:
       - cargo run --package schemagen
