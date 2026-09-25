@@ -1,6 +1,6 @@
 {
   "name": "@kachick/dprint-plugin-typstyle",
-  "version": "0.0.0",
+  "version": "0.5.0",
   "description": "dprint plugin for Typst formatting using typstyle",
   "keywords": [
     "typst",
@@ -9,7 +9,7 @@
     "dprint",
     "dprint-plugin"
   ],
-  "homepage": "https://github.com/kachick/dprint-plugin-typstyle#readme",
+  "homepage": "https://github.com/kachick/dprint-plugin-typstyle",
   "bugs": {
     "url": "https://github.com/kachick/dprint-plugin-typstyle/issues"
   },
@@ -21,6 +21,11 @@
   "author": "Kenichi Kamiya <kachick1@gmail.com>",
   "files": [
     "plugin.wasm",
+    "schema.json",
+    "LICENSE",
     "README.md"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }

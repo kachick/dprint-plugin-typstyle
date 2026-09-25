@@ -5,5 +5,5 @@ npm distribution of [dprint-plugin-typstyle](https://github.com/kachick/dprint-p
 ## Usage
 
 ```sh
-dprint add npm:@kachick/dprint-plugin-typstyle
+dprint add kachick/typstyle
 ```
