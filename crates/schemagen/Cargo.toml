@@ -8,5 +8,5 @@ publish = false
 dprint-plugin-typstyle = { path = "../..", features = ["schema"] }
 
 [dev-dependencies]
-jsonschema = { version = "0.57.0", default-features = false }
+jsonschema = { version = "0.58.0", default-features = false }
 serde_json = { version = "1.0" }
