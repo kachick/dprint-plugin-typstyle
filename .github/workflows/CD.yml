@@ -108,8 +108,9 @@ jobs:
           tree dist
       - name: Stage npm package
         run: |
-          cp dist/lib/plugin.wasm deployment/npm/plugin.wasm
-          cp dist/share/schema.json deployment/npm/schema.json
-          cp LICENSE deployment/npm/LICENSE
-          cd deployment/npm
+          cp dist/lib/plugin.wasm npm/plugin.wasm
+          cp dist/share/schema.json npm/schema.json
+          cp LICENSE npm/LICENSE
+          cp README.md npm/README.md
+          cd npm
           npm stage publish
