@@ -65,6 +65,8 @@
               # buildRustPackage does not enable these
               rust-analyzer
               clippy
+
+              nodejs # Latest stable. Publishing plugin into npmjs.com: https://dsherret.dev/posts/dprint-0.55/
             ];
 
             nativeBuildInputs = with pkgs; [

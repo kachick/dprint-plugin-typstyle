@@ -81,3 +81,35 @@ jobs:
           tree dist
       - run: |
           gh release create --repo '${{ github.repository }}' --verify-tag "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" dist/lib/plugin.wasm dist/share/schema.json
+  stage-npm:
+    if: inputs.release
+    runs-on: ubuntu-26.04
+    timeout-minutes: 15
+    needs: [check]
+    permissions:
+      contents: read
+      id-token: write # For npm trusted publishing via OIDC
+      actions: read # For `gh run download`
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: $/.github/actions/setup-nix
+      - name: Install Node.js
+        run: |
+          url="$(nix eval --raw --impure --expr '(builtins.fromJSON (builtins.readFile ./flake.lock)).nodes.nixpkgs.locked.url')"
+          nix profile add "${url}#nodejs"
+      - name: Download pre-built plugin
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ inputs.run_id }}
+        run: |
+          gh run download "$RUN_ID" --repo '${{ github.repository }}'
+          tree dist
+      - name: Stage npm package
+        run: |
+          cp dist/lib/plugin.wasm deployment/npm/plugin.wasm
+          cp dist/share/schema.json deployment/npm/schema.json
+          cp LICENSE deployment/npm/LICENSE
+          cd deployment/npm
+          npm stage publish
