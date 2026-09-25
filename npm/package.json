@@ -1,6 +1,6 @@
 {
   "name": "@kachick/dprint-plugin-typstyle",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "dprint plugin for Typst formatting using typstyle",
   "keywords": [
     "typst",
