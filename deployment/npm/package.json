@@ -24,8 +24,5 @@
     "schema.json",
     "LICENSE",
     "README.md"
-  ],
-  "publishConfig": {
-    "access": "public"
-  }
+  ]
 }
