@@ -30,7 +30,7 @@ doctest = false
 
 [workspace]
 resolver = "2"
-members = ["crates/schemagen"]
+members = ["crates/schemagen", "crates/sync-pkg-json"]
 
 # Optimization matching official dprint plugins.
 # Do not use `wasm-opt`:

@@ -951,6 +951,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "sync-pkg-json"
+version = "0.1.0"
+dependencies = [
+ "serde_json",
+ "toml_edit",
+]
+
+[[package]]
 name = "synstructure"
 version = "0.13.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"

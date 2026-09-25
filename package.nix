@@ -20,6 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     fileset = lib.fileset.unions [
       ./src
       ./crates/schemagen
+      ./crates/sync-pkg-json
       ./Cargo.toml
       ./Cargo.lock
       ./LICENSE

@@ -62,11 +62,40 @@ jobs:
           SKIP_BUILD: 'true'
         run:
           task test
+  verify-version:
+    if: inputs.release
+    runs-on: ubuntu-26.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Verify git tag matches configuration versions
+        run: |
+          CARGO_VERSION=$(grep -m 1 '^version = ' Cargo.toml | cut -d '"' -f 2)
+          NPM_VERSION=$(grep -m 1 '"version":' npm/package.json | cut -d '"' -f 4)
+          TAG_VERSION="$GITHUB_REF_NAME"
+
+          echo "Tag version: $TAG_VERSION"
+          echo "Cargo.toml version: $CARGO_VERSION"
+          echo "npm/package.json version: $NPM_VERSION"
+
+          if [ "$TAG_VERSION" != "$CARGO_VERSION" ]; then
+            echo "::error::Git tag '$TAG_VERSION' does not match Cargo.toml version '$CARGO_VERSION'"
+            exit 1
+          fi
+
+          if [ "$TAG_VERSION" != "$NPM_VERSION" ]; then
+            echo "::error::Git tag '$TAG_VERSION' does not match npm/package.json version '$NPM_VERSION'"
+            exit 1
+          fi
   release:
     if: inputs.release
     runs-on: ubuntu-26.04
     timeout-minutes: 15
-    needs: [check]
+    needs: [check, verify-version]
     permissions:
       # "contents: write" allows the action to create a release: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#permissions
       contents: write
@@ -80,12 +109,12 @@ jobs:
           gh run download "$RUN_ID" --repo '${{ github.repository }}'
           tree dist
       - run: |
-          gh release create --repo '${{ github.repository }}' --verify-tag "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" dist/lib/plugin.wasm dist/share/schema.json
+          gh release create --repo '${{ github.repository }}' --verify-tag "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --draft dist/lib/plugin.wasm dist/share/schema.json
   stage-npm:
     if: inputs.release
     runs-on: ubuntu-26.04
     timeout-minutes: 15
-    needs: [check]
+    needs: [check, verify-version]
     permissions:
       contents: read
       id-token: write # For npm trusted publishing via OIDC
@@ -95,10 +124,10 @@ jobs:
         with:
           persist-credentials: false
       - uses: $/.github/actions/setup-nix
-      - name: Install Node.js
+      - name: Install dependencies
         run: |
           url="$(nix eval --raw --impure --expr '(builtins.fromJSON (builtins.readFile ./flake.lock)).nodes.nixpkgs.locked.url')"
-          nix profile add "${url}#nodejs"
+          nix profile add "${url}#nodejs" "${url}#betterleaks"
       - name: Download pre-built plugin
         env:
           GH_TOKEN: ${{ github.token }}
@@ -113,4 +142,5 @@ jobs:
           cp LICENSE npm/LICENSE
           cp README.md npm/README.md
           cd npm
+          betterleaks dir .
           npm stage publish

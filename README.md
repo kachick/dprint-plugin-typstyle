@@ -14,17 +14,15 @@ This plugin delegates the formatter feature to the upstream typstyle-core [crate
 
 ## Configuration example
 
-Minimum
+Works with no configuration by default.
 
 ```json
 {
-  "plugins": [
-    "https://plugins.dprint.dev/kachick/typstyle-0.5.0.wasm"
-  ]
+  "typst": {}
 }
 ```
 
-Customize if necessary
+Customize if needed:
 
 ```json
 {
@@ -32,10 +30,7 @@ Customize if necessary
     "indentWidth": 3,
     "lineWidth": 78,
     "blankLinesUpperBound": 5
-  },
-  "plugins": [
-    "https://plugins.dprint.dev/kachick/typstyle-0.5.0.wasm"
-  ]
+  }
 }
 ```
 

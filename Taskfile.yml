@@ -70,10 +70,18 @@ tasks:
     cmds:
       - cargo clippy -- --deny warnings
       - cargo fmt --check
+      - cargo run --package sync-pkg-json -- --check
       - dprint check
       - typos . .github .vscode
       - zizmor .
       - git ls-files | xargs nix run github:kachick/selfup/v1.3.1 -- list -check
+  sync-package-json:
+    cmds:
+      - cargo run --package sync-pkg-json
+  bump:
+    cmds:
+      - cargo run --package sync-pkg-json -- {{.CLI_ARGS}}
+      - cargo check --workspace
   schema:
     cmds:
       - cargo run --package schemagen
