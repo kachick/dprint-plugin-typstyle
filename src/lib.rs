@@ -93,6 +93,7 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
             file_matching: FileMatchingInfo {
                 file_extensions: vec!["typ".to_string()],
                 file_names: vec![],
+                additive: false,
             },
         }
     }
@@ -150,6 +151,7 @@ mod tests {
         assert!(result.diagnostics.is_empty());
         assert_eq!(result.config, Configuration::default());
         assert_eq!(result.file_matching.file_extensions, vec!["typ"]);
+        assert!(!result.file_matching.additive);
     }
 
     #[test]
