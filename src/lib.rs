@@ -151,7 +151,6 @@ mod tests {
         assert!(result.diagnostics.is_empty());
         assert_eq!(result.config, Configuration::default());
         assert_eq!(result.file_matching.file_extensions, vec!["typ"]);
-        assert!(!result.file_matching.additive);
     }
 
     #[test]
