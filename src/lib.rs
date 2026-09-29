@@ -93,6 +93,7 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
             file_matching: FileMatchingInfo {
                 file_extensions: vec!["typ".to_string()],
                 file_names: vec![],
+                additive: false,
             },
         }
     }
