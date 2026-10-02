@@ -29,3 +29,14 @@ Tests bridge specifications and implementation. Tests must not simply copy or re
   Next, add only minimal unit tests as needed while writing code to prevent regressions.
 - **Never Assume "More Tests Are Better"**:
   NEVER think that having more tests is always better. Absolutely avoid redundant tests.
+
+## Taskfile Policy
+
+Keep tasks simple and single-purpose.
+
+- **Only for Short Single-Line Commands**:
+  Use Taskfile only when each task runs a short, single-line command.
+- **Never Write Multi-Line Scripts**:
+  Never write multi-line code in Taskfile, even when using YAML block scalars like `- |` for escaping.
+- **Use Dedicated Scripts**:
+  If a task needs multiple lines, place a dedicated script in the repository (such as under `scripts/`) and make the Taskfile only run that script.
