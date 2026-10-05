@@ -27,7 +27,7 @@ fn main() {
 
     if !plugin_path.exists() {
         eprintln!(
-            "Plugin wasm not found at {}. Run `task build` first.",
+            "Plugin wasm not found at {}. Run `cargo x build` first.",
             plugin_path.display()
         );
         std::process::exit(1);

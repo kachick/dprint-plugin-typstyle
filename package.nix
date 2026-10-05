@@ -22,6 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ./crates/e2e
       ./crates/schemagen
       ./crates/sync-pkg-json
+      ./crates/xtask
       ./Cargo.toml
       ./Cargo.lock
       ./LICENSE
