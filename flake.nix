@@ -59,6 +59,7 @@
               # buildRustPackage does not enable these
               rust-analyzer
               clippy
+              rustfmt
 
               nodejs # Latest stable. Publishing plugin into npmjs.com: https://dsherret.dev/posts/dprint-0.55/
               betterleaks
