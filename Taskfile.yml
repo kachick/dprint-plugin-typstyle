@@ -39,29 +39,28 @@ tasks:
       - cargo test --workspace
   test-e2e:
     deps:
-      - test-e2e-default
-      - test-e2e-all
-      - test-e2e-with_global_config
+      - build
+    cmds:
+      - cargo run --package e2e -- check
   test-e2e-*:
     deps:
       - build
     vars:
       TESTNAME: '{{index .MATCH 0}}'
     cmds:
-      - cd 'tests/{{.TESTNAME}}' && dprint check --plugins="$PLUGIN_PATH" expected.typ
-      - cd 'tests/{{.TESTNAME}}' && diff <(cat ../raw.typ | dprint fmt --stdin ../raw.typ --plugins="$PLUGIN_PATH") expected.typ
+      - cargo run --package e2e -- check '{{.TESTNAME}}'
   bump-fixtures-*:
     deps:
       - build
     vars:
       TESTNAME: '{{index .MATCH 0}}'
     cmds:
-      - cd 'tests/{{.TESTNAME}}' && cat ../raw.typ | dprint fmt --stdin ../raw.typ --plugins="$PLUGIN_PATH" > expected.typ
+      - cargo run --package e2e -- bump '{{.TESTNAME}}'
   bump-fixtures:
     deps:
-      - bump-fixtures-default
-      - bump-fixtures-all
-      - bump-fixtures-with_global_config
+      - build
+    cmds:
+      - cargo run --package e2e -- bump
   fmt:
     cmds:
       - cargo fmt

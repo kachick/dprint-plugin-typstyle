@@ -1,0 +1,26 @@
+# Why not put these tests in `tests/*.rs`?
+#
+# 1. Target mismatch:
+#    `cargo test` builds for the host machine (e.g. x86_64 Linux).
+#    This plugin is built for WebAssembly (`wasm32-unknown-unknown`).
+#    Cargo cannot build for another target during `cargo test` on stable Rust.
+#
+# 2. Lifecycle separation:
+#    The E2E test needs a built `.wasm` file to run with the `dprint` CLI.
+#    If we put tests in `tests/*.rs`, `cargo test` will fail when the `.wasm`
+#    file does not exist yet.
+#
+# 3. Fixture updating (`bump`):
+#    This tool also updates expected files (`bump`). Standard `#[test]`
+#    does not support this workflow.
+#
+# Therefore, we keep this runner as a workspace tool and run it via Taskfile:
+# `task build` -> `task test-e2e`.
+
+[package]
+name = "e2e"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]

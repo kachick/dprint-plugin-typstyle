@@ -19,6 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     root = ./.;
     fileset = lib.fileset.unions [
       ./src
+      ./crates/e2e
       ./crates/schemagen
       ./crates/sync-pkg-json
       ./Cargo.toml
