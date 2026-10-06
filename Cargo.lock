@@ -203,7 +203,7 @@ dependencies = [
 
 [[package]]
 name = "dprint-plugin-typstyle"
-version = "0.5.1"
+version = "0.5.2"
 dependencies = [
  "dprint-core",
  "dprint-development",
