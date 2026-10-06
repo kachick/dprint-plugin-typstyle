@@ -27,25 +27,23 @@ Customize if needed:
 ```json
 {
   "typst": {
-    "indentWidth": 3,
-    "lineWidth": 78,
-    "blankLinesUpperBound": 5
+    "wrapMode": "fill" // "none" by default
   }
 }
 ```
 
-## Order of determines the values
+## Configuration precedence
 
 1. typst section in dprint.json
 1. [global config in dprint.json](https://dprint.dev/config/#global-configuration)
 1. [default values in typstyle-core](https://github.com/typstyle-rs/typstyle/blob/v0.15.1/crates/typstyle-core/src/config.rs#L36-L43)
 
-## Relationships of the option names
+## Option name mappings
 
 | dprint-plugin-typstyle | dprint global config | typstyle-core           | typstyle CLI                         |
 | ---------------------- | -------------------- | ----------------------- | ------------------------------------ |
-| lineWidth              | lineWidth            | max_width               | column                               |
-| indentWidth            | indentWidth          | tab_spaces              | tab-width                            |
+| lineWidth              | lineWidth            | max_width               | line-width                           |
+| indentWidth            | indentWidth          | tab_spaces              | indent-width                         |
 | blankLinesUpperBound   | `none`               | blank_lines_upper_bound | `none`                               |
 | reorderImportItems     | `none`               | reorder_import_items    | no-reorder-import-items # disable    |
 | wrapMode               | `none`               | wrap_mode               | wrap-text (`none`/`fill`/`sentence`) |
