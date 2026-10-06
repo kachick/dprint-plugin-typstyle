@@ -67,6 +67,3 @@ jobs:
           direnv allow .
           direnv export gha > "$GITHUB_ENV"
       - run: cargo x default
-        env:
-          # Prevent GitHub API rate limiting during `nix run github:`
-          GH_TOKEN: ${{ github.token }}
