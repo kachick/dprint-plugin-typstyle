@@ -98,7 +98,10 @@ fn task_build() -> Result<(), String> {
         println!("SKIP_BUILD=true: skipping build");
         return Ok(());
     }
-    run_cmd("cargo", &["build", "--target", "wasm32-unknown-unknown"])
+    run_cmd(
+        "cargo",
+        &["build", "--locked", "--target", "wasm32-unknown-unknown"],
+    )
 }
 
 fn task_test_unit() -> Result<(), String> {
@@ -106,12 +109,12 @@ fn task_test_unit() -> Result<(), String> {
         println!("SKIP_BUILD=true: skipping unit tests");
         return Ok(());
     }
-    run_cmd("cargo", &["test", "--workspace"])
+    run_cmd("cargo", &["test", "--locked", "--workspace"])
 }
 
 fn task_test_e2e(filter: Option<&str>) -> Result<(), String> {
     task_build()?;
-    let mut args = vec!["run", "--package", "e2e", "--", "check"];
+    let mut args = vec!["run", "--locked", "--package", "e2e", "--", "check"];
     if let Some(f) = filter {
         args.push(f);
     }
@@ -120,7 +123,7 @@ fn task_test_e2e(filter: Option<&str>) -> Result<(), String> {
 
 fn task_bump_fixtures(filter: Option<&str>) -> Result<(), String> {
     task_build()?;
-    let mut args = vec!["run", "--package", "e2e", "--", "bump"];
+    let mut args = vec!["run", "--locked", "--package", "e2e", "--", "bump"];
     if let Some(f) = filter {
         args.push(f);
     }
@@ -139,11 +142,18 @@ fn task_fmt() -> Result<(), String> {
 }
 
 fn task_lint() -> Result<(), String> {
-    run_cmd("cargo", &["clippy", "--", "--deny", "warnings"])?;
+    run_cmd("cargo", &["clippy", "--locked", "--", "--deny", "warnings"])?;
     run_cmd("cargo", &["fmt", "--check"])?;
     run_cmd(
         "cargo",
-        &["run", "--package", "sync-pkg-json", "--", "--check"],
+        &[
+            "run",
+            "--locked",
+            "--package",
+            "sync-pkg-json",
+            "--",
+            "--check",
+        ],
     )?;
     run_cmd("dprint", &["check"])?;
     run_cmd("typos", &[".", ".github", ".vscode"])?;
@@ -157,14 +167,22 @@ fn task_check() -> Result<(), String> {
 }
 
 fn task_sync_package_json() -> Result<(), String> {
-    run_cmd("cargo", &["run", "--package", "sync-pkg-json"])
+    run_cmd("cargo", &["run", "--locked", "--package", "sync-pkg-json"])
 }
 
 fn task_bump(version: &str) -> Result<(), String> {
     run_cmd(
         "cargo",
-        &["run", "--package", "sync-pkg-json", "--", version],
+        &[
+            "run",
+            "--locked",
+            "--package",
+            "sync-pkg-json",
+            "--",
+            version,
+        ],
     )?;
+    // Do not pass --locked here because this step intentionally updates Cargo.lock with the new version
     run_cmd("cargo", &["check", "--workspace"])?;
     run_cmd(
         "git",
@@ -175,7 +193,7 @@ fn task_bump(version: &str) -> Result<(), String> {
 }
 
 fn task_schema() -> Result<(), String> {
-    run_cmd("cargo", &["run", "--package", "schemagen"])
+    run_cmd("cargo", &["run", "--locked", "--package", "schemagen"])
 }
 
 fn task_selfup(check: bool) -> Result<(), String> {

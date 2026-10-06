@@ -57,7 +57,7 @@ jobs:
           PLUGIN_PATH: '${{ github.workspace }}/dist/lib/plugin.wasm'
           SKIP_BUILD: 'true'
         run:
-          cargo x test
+          cargo --locked x test
   verify-version:
     if: inputs.release
     runs-on: ubuntu-26.04
