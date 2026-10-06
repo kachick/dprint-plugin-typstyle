@@ -34,9 +34,14 @@ mod tests {
 
         let validator = jsonschema::validator_for(&schema_value).expect("valid JSON Schema");
 
-        let fixture: serde_json::Value =
-            serde_json::from_str(include_str!("../../../tests/all/dprint.json")).unwrap();
-        assert!(validator.is_valid(&fixture["typst"]));
+        let fixture = serde_json::json!({
+            "indentWidth": 3,
+            "lineWidth": 20,
+            "blankLinesUpperBound": 5,
+            "reorderImportItems": true,
+            "wrapMode": "fill"
+        });
+        assert!(validator.is_valid(&fixture));
 
         for mode in ["none", "fill", "sentence"] {
             let valid = serde_json::json!({ "wrapMode": mode });

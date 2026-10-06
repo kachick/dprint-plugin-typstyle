@@ -1,0 +1,7 @@
+~~ wrapMode: fill, lineWidth: 30 ~~
+== wraps long markup text ==
+In this report, we will explore the various factors.
+
+[expect]
+In this report, we will
+explore the various factors.

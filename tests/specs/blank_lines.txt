@@ -1,0 +1,21 @@
+~~ blankLinesUpperBound: 2 ~~
+== limits consecutive blank lines in code block ==
+#let x = (
+  1,
+
+
+
+
+
+
+
+  2,
+)
+
+[expect]
+#let x = (
+  1,
+
+
+  2,
+)

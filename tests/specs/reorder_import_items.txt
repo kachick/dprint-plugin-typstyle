@@ -1,0 +1,6 @@
+~~ reorderImportItems: true ~~
+== reorders import items alphabetically ==
+#import "foo.typ": b, c, a
+
+[expect]
+#import "foo.typ": a, b, c
