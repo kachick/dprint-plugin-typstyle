@@ -1,0 +1,27 @@
+== formats simple set rule ==
+#set text(  size: 10pt  )
+
+[expect]
+#set text(size: 10pt)
+
+== formats multi line with default indent ==
+#let f(
+x,
+y,
+) = {
+x + y
+}
+
+[expect]
+#let f(
+  x,
+  y,
+) = {
+  x + y
+}
+
+== does not wrap long markup text by default ==
+In this report, we will explore the various factors that influence fluid dynamics in glaciers.
+
+[expect]
+In this report, we will explore the various factors that influence fluid dynamics in glaciers.

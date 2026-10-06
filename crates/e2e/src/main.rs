@@ -57,7 +57,7 @@ fn get_test_dirs(repo_root: &Path, test_name: Option<&str>) -> Vec<PathBuf> {
         for entry in fs::read_dir(&tests_root).expect("Failed to read tests directory") {
             let entry = entry.expect("Failed to read test entry");
             let path = entry.path();
-            if path.is_dir() {
+            if path.is_dir() && path.join("expected.typ").is_file() {
                 dirs.push(path);
             }
         }

@@ -1,0 +1,16 @@
+~~ indentWidth: 4 ~~
+== formats with custom indent ==
+#let f(
+x,
+y,
+) = {
+x + y
+}
+
+[expect]
+#let f(
+    x,
+    y,
+) = {
+    x + y
+}
