@@ -17,6 +17,20 @@ An internal runner for End-to-End (E2E) testing and fixture updating.
 Therefore, we keep this runner as a workspace tool and run it via xtask:
 `cargo x build` -> `cargo x test-e2e`.
 
+## Scope and test strategy
+
+E2E tests serve as minimal integration smoke tests to ensure built Wasm binaries
+run correctly inside the `dprint` CLI:
+
+- `tests/default`: Verifies baseline Wasm loading and formatting.
+- `tests/with_global_config`: Verifies CLI-to-Wasm inheritance of top-level global settings.
+
+The `dprint check` step in each test naturally verifies that fixture `dprint.json`
+files conform to plugin and CLI expectations.
+
+Configuration option variations are covered by spec tests in `tests/specs/`
+(run via `cargo test`) to keep E2E fixtures lightweight and avoid frequent bump churn.
+
 ## Usage
 
 ```sh

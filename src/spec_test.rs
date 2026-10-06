@@ -8,6 +8,14 @@ use dprint_core::plugins::{
 };
 use dprint_development::{ParseSpecOptions, RunSpecsOptions, ensure_no_diagnostics, run_specs};
 
+// Spec tests verify formatting results across configuration options using dprint-development.
+//
+// Why spec tests instead of full E2E directories?
+// 1. Fast: runs in-process during `cargo test` without building Wasm or calling the dprint CLI.
+// 2. Focused: each spec file tests one option directly instead of maintaining large full-file diffs.
+// 3. Idempotent: `format_twice: true` automatically verifies re-formatting stability.
+//
+// Real Wasm loading and CLI boundary checks are kept separately in crates/e2e as minimal smoke tests.
 #[test]
 fn test_specs() {
     let global_config = GlobalConfiguration::default();
