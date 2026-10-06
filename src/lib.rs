@@ -103,19 +103,55 @@ impl SyncPluginHandler<Configuration> for TypstPluginHandler {
         request: SyncFormatRequest<Configuration>,
         _format_with_host: impl FnMut(SyncHostFormatRequest) -> FormatResult,
     ) -> FormatResult {
-        if request.range.is_some() {
-            return Ok(None);
-        }
-
         let text = std::str::from_utf8(&request.file_bytes)?;
 
         let config = typstyle_core::Config::from(request.config);
         let formatter = typstyle_core::Typstyle::new(config);
 
-        match formatter.format_text(text).render() {
-            Ok(result) if result != text => Ok(Some(result.into())),
-            Ok(_) => Ok(None),
-            Err(err) => Err(FormatError::new(err)),
+        if let Some(range) = request.range {
+            let mut start = range.start.min(text.len());
+            let mut end = range.end.min(text.len());
+            if start > end {
+                start = end;
+            }
+            while !text.is_char_boundary(start) {
+                start = start.saturating_sub(1);
+            }
+            while !text.is_char_boundary(end) {
+                end = (end + 1).min(text.len());
+            }
+
+            let source = typst_syntax::Source::detached(text.to_string());
+            let range_result = formatter
+                .format_source_range(source, start..end)
+                .map_err(FormatError::new)?;
+
+            if range_result.source_range.start > text.len()
+                || range_result.source_range.end > text.len()
+                || range_result.source_range.start > range_result.source_range.end
+            {
+                return Ok(None);
+            }
+
+            let mut new_text = String::with_capacity(
+                text.len().saturating_sub(range_result.source_range.len())
+                    + range_result.content.len(),
+            );
+            new_text.push_str(&text[..range_result.source_range.start]);
+            new_text.push_str(&range_result.content);
+            new_text.push_str(&text[range_result.source_range.end..]);
+
+            if new_text != text {
+                Ok(Some(new_text.into_bytes()))
+            } else {
+                Ok(None)
+            }
+        } else {
+            match formatter.format_text(text).render() {
+                Ok(result) if result != text => Ok(Some(result.into())),
+                Ok(_) => Ok(None),
+                Err(err) => Err(FormatError::new(err)),
+            }
         }
     }
 
@@ -201,7 +237,31 @@ mod tests {
     }
 
     #[test]
-    fn test_format_range_returns_none() {
+    fn test_format_range() {
+        let mut handler = TypstPluginHandler;
+        let resolve_result =
+            handler.resolve_config(ConfigKeyMap::new(), &GlobalConfiguration::default());
+        let cancellation_token = NullCancellationToken;
+        let original = "#set text(  size: 10pt  )\n#set text(  fill: red  )\n";
+        let request = SyncFormatRequest {
+            file_path: &PathBuf::from("test.typ"),
+            file_bytes: original.as_bytes().to_vec(),
+            config_id: FormatConfigId::from_raw(1),
+            config: &resolve_result.config,
+            range: Some(0..25),
+            token: &cancellation_token,
+        };
+        let formatted = handler.format(request, |_| unreachable!()).unwrap();
+        assert!(formatted.is_some());
+        let formatted_str = String::from_utf8(formatted.unwrap()).unwrap();
+        assert_eq!(
+            formatted_str,
+            "#set text(size: 10pt)\n#set text(  fill: red  )\n"
+        );
+    }
+
+    #[test]
+    fn test_format_range_already_formatted_returns_none() {
         let mut handler = TypstPluginHandler;
         let resolve_result =
             handler.resolve_config(ConfigKeyMap::new(), &GlobalConfiguration::default());
@@ -211,11 +271,47 @@ mod tests {
             file_bytes: b"#set text(size: 10pt)\n".to_vec(),
             config_id: FormatConfigId::from_raw(1),
             config: &resolve_result.config,
-            range: Some(std::ops::Range { start: 0, end: 5 }),
+            range: Some(0..5),
             token: &cancellation_token,
         };
         let formatted = handler.format(request, |_| unreachable!()).unwrap();
         assert_eq!(formatted, None);
+    }
+
+    #[test]
+    fn test_format_range_out_of_bounds_returns_none() {
+        let mut handler = TypstPluginHandler;
+        let resolve_result =
+            handler.resolve_config(ConfigKeyMap::new(), &GlobalConfiguration::default());
+        let cancellation_token = NullCancellationToken;
+        let request = SyncFormatRequest {
+            file_path: &PathBuf::from("test.typ"),
+            file_bytes: b"#set text(size: 10pt)\n".to_vec(),
+            config_id: FormatConfigId::from_raw(1),
+            config: &resolve_result.config,
+            range: Some(100..200),
+            token: &cancellation_token,
+        };
+        let formatted = handler.format(request, |_| unreachable!()).unwrap();
+        assert_eq!(formatted, None);
+    }
+
+    #[test]
+    fn test_format_range_syntax_error() {
+        let mut handler = TypstPluginHandler;
+        let resolve_result =
+            handler.resolve_config(ConfigKeyMap::new(), &GlobalConfiguration::default());
+        let cancellation_token = NullCancellationToken;
+        let request = SyncFormatRequest {
+            file_path: &PathBuf::from("test.typ"),
+            file_bytes: b"#let x = (\n".to_vec(),
+            config_id: FormatConfigId::from_raw(1),
+            config: &resolve_result.config,
+            range: Some(0..5),
+            token: &cancellation_token,
+        };
+        let result = handler.format(request, |_| unreachable!());
+        assert!(result.is_err());
     }
 
     #[test]
