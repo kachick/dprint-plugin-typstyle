@@ -210,6 +210,7 @@ dependencies = [
  "schemars",
  "serde",
  "serde_json",
+ "typst-syntax",
  "typstyle-core",
 ]
 
