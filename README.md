@@ -7,7 +7,7 @@
 ## Installation
 
 ```bash
-dprint config add 'kachick/typstyle'
+dprint add 'kachick/typstyle'
 ```
 
 This plugin delegates the formatter feature to the upstream typstyle-core [crate](https://crates.io/crates/typstyle).
