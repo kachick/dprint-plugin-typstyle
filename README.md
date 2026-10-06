@@ -52,4 +52,4 @@ Customize if needed:
 
 ## Versioning
 
-Versions are updated based on changes in dprint and typestyle-core, and do not correspond to upstream version numbers.
+Versions are updated based on changes in dprint and typstyle-core, and do not correspond to upstream version numbers.
