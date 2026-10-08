@@ -7,7 +7,7 @@
   // Keep the default rangeStrategy ("auto", which defaults to "update-lockfile" for Cargo):
   // - Retains loose caret constraints (e.g. "1.0") in Cargo.toml while keeping Cargo.lock up to date.
   // - Automatically updates Cargo.toml only when an update exceeds the current SemVer range (e.g. breaking/major updates).
-  // - Note: This repository produces an end-product WASM plugin (publish = false), so bumping minimum requirements
+  // - Note: This repository produces an end-product Wasm plugin (publish = false), so bumping minimum requirements
   //   would not break downstream crates, but keeping clean manifest ranges is preferred.
   "enabledManagers": [
     "cargo",
