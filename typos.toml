@@ -22,8 +22,3 @@ typestyle = "typstyle"
 # https://github.com/crate-ci/typos/issues/899
 [default.extend-identifiers]
 WASM = "Wasm"
-
-[files]
-extend-exclude = [
-  "go.mod",
-]
