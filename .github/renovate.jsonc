@@ -4,11 +4,9 @@
   // Cargo updates were migrated from Dependabot due to:
   // - https://github.com/dependabot/dependabot-core/issues/4009 (unstable versioning-strategy: increase)
   // - https://github.com/dependabot/dependabot-core/issues/14196 (Cargo.lock updated without updating Cargo.toml, keeping outdated manifests and blocking vulnerability updates)
-  // Keep the default rangeStrategy ("auto", which defaults to "update-lockfile" for Cargo):
-  // - Retains loose caret constraints (e.g. "1.0") in Cargo.toml while keeping Cargo.lock up to date.
-  // - Automatically updates Cargo.toml only when an update exceeds the current SemVer range (e.g. breaking/major updates).
-  // - Note: This repository produces an end-product Wasm plugin (publish = false), so bumping minimum requirements
-  //   would not break downstream crates, but keeping clean manifest ranges is preferred.
+  // Use rangeStrategy "bump" so Renovate updates Cargo.toml together with Cargo.lock.
+  // Default rangeStrategy "auto" behaves as "update-lockfile" for Cargo and keeps Cargo.toml untouched.
+  "rangeStrategy": "bump",
   "enabledManagers": [
     "cargo",
     "custom.regex"
