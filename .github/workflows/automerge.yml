@@ -1,0 +1,22 @@
+name: 🤖👌🤖
+
+permissions:
+  contents: read
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/automerge.yml'
+  schedule:
+    # Run every 2 hours at minute 17 to avoid traffic peaks
+    - cron: '17 */2 * * *'
+  workflow_dispatch:
+
+jobs:
+  automerge:
+    uses: kachick/workflows/.github/workflows/reusable-automerge.yml@main
+    with:
+      app-id: ${{ vars.SAMU_APP_ID }}
+      dry-run: ${{ github.event_name == 'pull_request' }}
+    secrets:
+      APP_PRIVATE_KEY: ${{ secrets.SAMU_APP_PRIVATE_KEY }}

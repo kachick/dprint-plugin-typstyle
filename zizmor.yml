@@ -5,6 +5,3 @@ rules:
         kachick/*: any
         actions/*: any
         crate-ci/*: any
-  excessive-permissions:
-    ignore:
-      - merge-bot-pr.yml
