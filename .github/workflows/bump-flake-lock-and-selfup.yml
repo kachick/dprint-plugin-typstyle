@@ -15,12 +15,11 @@ permissions:
 
 jobs:
   bump:
-    uses: kachick/selfup/.github/workflows/reusable-bump-flake-lock-and-selfup.yml@06a37ddb70ce25ec28b75ce500e15e7fb4d7c4a9 # v1.3.1
+    uses: kachick/workflows/.github/workflows/reusable-bump-flake-lock.yml@main
     with:
-      app_id: ${{ vars.APP_ID }}
+      app-id: ${{ vars.SAMU_APP_ID }}
       dry-run: ${{ github.event_name == 'pull_request' }}
-      pr-title: 'Bump flake.lock and related dependencies'
-      optional-run: |
-        echo 'Add another changes and git commit here, especially for .node-version/.ruby-version'
+      post-commit-lock-file: nix develop --command cargo xtask selfup
+      post-commit-lock-file-title: 'Sync CI dependencies with nixpkgs'
     secrets:
-      APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+      APP_PRIVATE_KEY: ${{ secrets.SAMU_APP_PRIVATE_KEY }}
