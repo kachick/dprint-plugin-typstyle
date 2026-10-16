@@ -15,7 +15,7 @@ schema = ["dep:schemars"]
 
 [dependencies]
 dprint-core = { version = "0.71.0", features = ["wasm"] }
-schemars = { version = "1.2.2", optional = true }
+schemars = { version = "1.2.3", optional = true }
 serde = { version = "1.0.229", features = ["derive"] }
 serde_json = { version = "1.0", features = ["preserve_order"] }
 
