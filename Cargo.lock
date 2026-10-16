@@ -717,9 +717,9 @@ dependencies = [
 
 [[package]]
 name = "prettyless"
-version = "0.3.0"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "749d63085aa461d80b3233e48781bf9e9dca8147fbc98f577e0697c6827dc418"
+checksum = "17a5d5a313f553d0ac19590baf50cd276d724f45a8c56bbcd9d6809f7997e70c"
 dependencies = [
  "typed-arena",
  "unicode-width",
@@ -1232,9 +1232,9 @@ dependencies = [
 
 [[package]]
 name = "typstyle-core"
-version = "0.15.1"
+version = "0.15.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c80a95fb8a007c740c5f5362b86a6be9b9aa3bcea2d7ffabf0bb4aeb188d90b6"
+checksum = "445745ee9ba929711587f89387f4e0031bb0dad3a4fd549f028bbcb73398b821"
 dependencies = [
  "icu_segmenter",
  "itertools",
