@@ -9,4 +9,4 @@ dprint-plugin-typstyle = { path = "../..", features = ["schema"] }
 
 [dev-dependencies]
 jsonschema = { version = "0.58.6", default-features = false }
-serde_json = { version = "1.0" }
+serde_json = { version = "1.0.154" }
