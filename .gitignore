@@ -1,11 +1,7 @@
-.direnv
-/result
-
-# Added by cargo
-
 /target
-
-*.wasm
-
-dist
-node_modules
+deployment/npm/plugin.wasm
+deployment/npm/node_modules
+deployment/npm/LICENSE
+deployment/npm/NOTICE
+.claude
+.vscode

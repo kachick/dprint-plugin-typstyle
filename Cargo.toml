@@ -3,49 +3,16 @@ name = "dprint-plugin-typstyle"
 version = "0.5.2"
 authors = ["Kenichi Kamiya <kachick1@gmail.com>"]
 edition = "2024"
+homepage = "https://github.com/dprint/dprint-plugin-typstyle"
+keywords = ["formatting", "formatter", "typst", "typstyle"]
 license = "Apache-2.0"
 publish = false
-repository = "https://github.com/kachick/dprint-plugin-typstyle"
-description = "dprint plugin for Typst formatting using typstyle"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[features]
-schema = ["dep:schemars"]
-
-[dependencies]
-dprint-core = { version = "0.71.0", features = ["wasm"] }
-schemars = { version = "1.2.3", optional = true }
-serde = { version = "1.0.229", features = ["derive"] }
-serde_json = { version = "1.0.154", features = ["preserve_order"] }
-
-# dprint Wasm plugins cannot link crates with wasm-bindgen (https://github.com/dprint/dprint/issues/447).
-# Typstyle separates wasm-bindgen bindings into `typstyle-wasm` (https://github.com/typstyle-rs/typstyle/pull/309), leaving `typstyle-core` clean.
-typst-syntax = "0.15.1"
-typstyle-core = "0.15.2"
-
-[dev-dependencies]
-dprint-development = "0.12.1"
+repository = "https://github.com/dprint/dprint-plugin-typstyle"
+description = "Typst formatter for dprint via typstyle."
 
 [lib]
 crate-type = ["lib", "cdylib"]
-# Distributed only as a dprint Wasm plugin with no public Rust API
-doctest = false
 
-[workspace]
-resolver = "2"
-members = [
-  "crates/e2e",
-  "crates/schemagen",
-  "crates/sync-pkg-json",
-  "crates/xtask",
-]
-
-# Optimization matching official dprint plugins.
-# Do not use `wasm-opt`:
-# 1. Official dprint plugins do not use wasm-opt in their build pipelines.
-# 2. Historically, wasm-opt caused crashes (https://github.com/dprint/dprint/issues/79).
-# 3. rustc release profile with LTO is enough for wasmtime execution.
 [profile.release]
 opt-level = 3
 debug = false
@@ -53,3 +20,21 @@ lto = true
 debug-assertions = false
 overflow-checks = false
 panic = "abort"
+
+[features]
+wasm = ["serde_json", "dprint-core/wasm"]
+
+[dependencies]
+dprint-core = { version = "0.71.0", default-features = false }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = { version = "1.0.154", optional = true }
+thiserror = "2"
+# dprint Wasm plugins cannot link crates with wasm-bindgen (https://github.com/dprint/dprint/issues/447).
+# Typstyle separates wasm-bindgen bindings into `typstyle-wasm` (https://github.com/typstyle-rs/typstyle/pull/309), leaving `typstyle-core` clean.
+# scripts/update.ts keeps typst-syntax on the version that typstyle-core depends on.
+typst-syntax = "0.15.1"
+typstyle-core = "0.15.2"
+
+[dev-dependencies]
+dprint-development = "0.12.1"
+serde_json = "1.0.154"

@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "automation": "jsr:@dprint/automation@0.12.2"
+  }
+}
