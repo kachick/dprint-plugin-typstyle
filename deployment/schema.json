@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://plugins.dprint.dev/dprint/dprint-plugin-typstyle/0.0.0/schema.json",
+  "type": "object",
+  "properties": {
+    "lineWidth": {
+      "description": "The width of a line the formatter will try to stay under. Note that this limit will be exceeded in some cases.",
+      "default": 80,
+      "type": "number"
+    },
+    "indentWidth": {
+      "description": "The number of spaces for an indent.",
+      "default": 2,
+      "type": "number"
+    },
+    "blankLinesUpperBound": {
+      "description": "The maximum number of consecutive blank lines allowed.",
+      "default": 1,
+      "type": "number"
+    },
+    "reorderImportItems": {
+      "description": "Whether to sort the items of an import statement alphabetically.",
+      "default": true,
+      "type": "boolean"
+    },
+    "wrapMode": {
+      "description": "How to wrap text in markup.",
+      "type": "string",
+      "default": "none",
+      "oneOf": [{
+        "const": "none",
+        "description": "Does not wrap text."
+      }, {
+        "const": "fill",
+        "description": "Wraps text to fit within the line width."
+      }, {
+        "const": "sentence",
+        "description": "Places each sentence on its own line."
+      }]
+    }
+  }
+}

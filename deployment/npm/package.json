@@ -1,0 +1,30 @@
+{
+  "name": "@dprint/typstyle",
+  "version": "0.0.0",
+  "description": "Wasm buffer for dprint-plugin-typstyle.",
+  "keywords": [
+    "typst",
+    "typstyle",
+    "code",
+    "formatter",
+    "dprint"
+  ],
+  "homepage": "https://github.com/dprint/dprint-plugin-typstyle#readme",
+  "bugs": {
+    "url": "https://github.com/dprint/dprint-plugin-typstyle/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dprint/dprint-plugin-typstyle.git"
+  },
+  "license": "Apache-2.0",
+  "author": "Kenichi Kamiya",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "scripts": {
+    "test": "node index.test.js"
+  },
+  "devDependencies": {
+    "@dprint/formatter": "~0.4.0"
+  }
+}
