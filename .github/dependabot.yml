@@ -4,8 +4,6 @@ updates:
     directory: '/'
     schedule:
       interval: 'monthly'
-    ignore:
-      - dependency-name: 'crate-ci/typos'
     cooldown:
       default-days: 7
   # Cargo updates were migrated to Renovatebot.

@@ -40,7 +40,6 @@ fn dispatch(task: &str, args: &[String]) -> Result<(), String> {
             task_bump(version)?;
         }
         "schema" => task_schema()?,
-        "selfup" => task_selfup(false)?,
         "--help" | "-h" | "help" => print_help(),
         other => {
             print_help();
@@ -63,11 +62,10 @@ Available tasks:
     test-e2e [name]     Run e2e tests (builds wasm first unless SKIP_BUILD=true)
     bump-fixtures [name] Update e2e test fixtures
     fmt                 Format Rust code and other files (cargo fmt + dprint fmt)
-    lint                Run clippy, fmt --check, dprint, typos, zizmor, selfup
+    lint                Run clippy, fmt --check, dprint, typos, zizmor
     sync-package-json   Sync Cargo version into npm/package.json
     bump <version>      Bump version, update Cargo.lock, and create git commit
     schema              Generate schema.json
-    selfup              Run selfup across git-tracked files
 "#
     );
 }
@@ -157,8 +155,7 @@ fn task_lint() -> Result<(), String> {
     )?;
     run_cmd("dprint", &["check"])?;
     run_cmd("typos", &[".", ".github", ".vscode"])?;
-    run_cmd("zizmor", &["."])?;
-    task_selfup(true)
+    run_cmd("zizmor", &["."])
 }
 
 fn task_check() -> Result<(), String> {
@@ -194,29 +191,4 @@ fn task_bump(version: &str) -> Result<(), String> {
 
 fn task_schema() -> Result<(), String> {
     run_cmd("cargo", &["run", "--locked", "--package", "schemagen"])
-}
-
-fn task_selfup(check: bool) -> Result<(), String> {
-    let output = Command::new("git")
-        .args(["ls-files"])
-        .output()
-        .map_err(|e| format!("failed to run git ls-files: {e}"))?;
-
-    if !output.status.success() {
-        return Err("git ls-files failed".to_string());
-    }
-
-    let stdout = String::from_utf8(output.stdout)
-        .map_err(|e| format!("invalid utf8 from git ls-files: {e}"))?;
-    let files: Vec<&str> = stdout.lines().collect();
-
-    let mut args = vec!["run", "github:kachick/selfup/v1.3.1", "--"];
-    if check {
-        args.extend(&["list", "-check"]);
-    } else {
-        args.push("run");
-    }
-    args.extend(files);
-
-    run_cmd("nix", &args)
 }
