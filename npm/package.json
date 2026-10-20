@@ -23,6 +23,7 @@
     "plugin.wasm",
     "schema.json",
     "LICENSE",
+    "NOTICE",
     "README.md"
   ]
 }

@@ -136,6 +136,7 @@ jobs:
           cp dist/lib/plugin.wasm npm/plugin.wasm
           cp dist/share/schema.json npm/schema.json
           cp LICENSE npm/LICENSE
+          cp NOTICE npm/NOTICE
           cp README.md npm/README.md
           cd npm
           betterleaks dir .
