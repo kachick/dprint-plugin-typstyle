@@ -2,6 +2,5 @@ rules:
   unpinned-uses:
     config:
       policies:
-        kachick/*: any
         actions/*: any
         crate-ci/*: any
