@@ -12,5 +12,8 @@ import { getBuffer } from "@dprint/typstyle";
 
 const formatter = createFromBuffer(getBuffer());
 
-console.log(formatter.formatText("file.typ", "#set text(  size: 10pt  )"));
+console.log(formatter.formatText({
+  filePath: "file.typ",
+  fileText: "#set text(  size: 10pt  )",
+}));
 ```
