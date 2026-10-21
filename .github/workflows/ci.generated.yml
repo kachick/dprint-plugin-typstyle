@@ -12,15 +12,8 @@ on:
       - '*'
 jobs:
   build:
-    name: '${{ matrix.config.kind }} ${{ matrix.config.os }}'
-    runs-on: '${{ matrix.config.os }}'
-    strategy:
-      matrix:
-        config:
-          - os: ubuntu-latest
-            kind: test_release
-          - os: ubuntu-latest
-            kind: test_debug
+    name: build
+    runs-on: ubuntu-latest
     env:
       CARGO_INCREMENTAL: 0
       RUST_BACKTRACE: full
@@ -28,7 +21,6 @@ jobs:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       - uses: dsherret/rust-toolchain-file@3551321aa44dd44a0393eb3b6bdfbc5d25ecf621 # v1
       - name: Install wasm32 target
-        if: matrix.config.kind == 'test_release'
         run: rustup target add wasm32-unknown-unknown
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
         with:
@@ -36,36 +28,26 @@ jobs:
       - uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed # v2
         with:
           deno-version: v2.x
-      - name: Build debug
-        if: matrix.config.kind == 'test_debug'
-        run: cargo build
       - name: Build release
-        if: matrix.config.kind == 'test_release'
         run: cargo build --target wasm32-unknown-unknown --features wasm --release
-      - name: Test debug
-        if: matrix.config.kind == 'test_debug'
+      - name: Test
         run: cargo test
-      - name: Test release
-        if: matrix.config.kind == 'test_release'
-        run: cargo test --release
       - name: Get tag version
         id: get_tag_version
-        if: 'matrix.config.kind == ''test_release'' && startsWith(github.ref, ''refs/tags/'')'
+        if: 'startsWith(github.ref, ''refs/tags/'')'
         run: 'echo "TAG_VERSION=${GITHUB_REF/refs\/tags\//}" >> "$GITHUB_OUTPUT"'
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
-        if: matrix.config.kind == 'test_release'
         with:
           node-version: 24.x
           registry-url: 'https://registry.npmjs.org'
       - name: Setup and test npm deployment
-        if: matrix.config.kind == 'test_release'
         run: |-
           cd deployment/npm
           npm install
           node setup.js
           npm run test
       - name: Pre-release
-        if: 'matrix.config.kind == ''test_release'' && startsWith(github.ref, ''refs/tags/'')'
+        if: 'startsWith(github.ref, ''refs/tags/'')'
         run: |-
           # update config schema to have version
           sed -i 's/typstyle\/0.0.0/typstyle\/${{ steps.get_tag_version.outputs.TAG_VERSION }}/' deployment/schema.json
@@ -74,7 +56,7 @@ jobs:
           # create release notes
           deno run -A ./scripts/generateReleaseNotes.ts ${{ steps.get_tag_version.outputs.TAG_VERSION }} > ${{ github.workspace }}-CHANGELOG.txt
       - name: Release
-        if: 'matrix.config.kind == ''test_release'' && startsWith(github.ref, ''refs/tags/'')'
+        if: 'startsWith(github.ref, ''refs/tags/'')'
         env:
           GH_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
         run: |-
@@ -83,7 +65,6 @@ jobs:
             target/wasm32-unknown-unknown/release/plugin.wasm \
             deployment/schema.json
       - name: Lint workflow generation
-        if: matrix.config.kind == 'test_debug'
         run: |-
           ./.github/workflows/ci.ts --lint
           ./.github/workflows/publish_npm.ts --lint
