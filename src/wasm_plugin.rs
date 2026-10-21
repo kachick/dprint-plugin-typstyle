@@ -45,7 +45,7 @@ impl SyncPluginHandler<Configuration> for TypstylePluginHandler {
       name: env!("CARGO_PKG_NAME").to_string(),
       version: version.clone(),
       config_key: "typst".to_string(),
-      help_url: "https://github.com/dprint/dprint-plugin-typstyle".to_string(),
+      help_url: "https://dprint.dev/plugins/typstyle".to_string(),
       config_schema_url: format!(
         "https://plugins.dprint.dev/dprint/dprint-plugin-typstyle/{}/schema.json",
         version
